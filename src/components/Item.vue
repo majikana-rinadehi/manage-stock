@@ -2,7 +2,7 @@
     <div class="flex justify-end m-2 bg-white p-2"
         v-for="(task, index) in category.tasks"
         v-bind:key="index"
-        @click="$emit('openModal')">
+        @click="$emit('openModal', task)">
         <!--アイテム-->
         <div class="bg-red-500 -mt-2 h-7 w-2 mr-3"
             v-if="task.period == 1">
@@ -21,7 +21,10 @@
                 <!--プラスボタン-->
                 ＋
             </button>
-            <input class="w-2" type="text" value="1個"><!--個数-->
+            <input 
+                class="w-2" 
+                type="text" 
+                :value="task.value"><!--個数-->
             <button>
                 <!--マイナスボタン-->
                 −

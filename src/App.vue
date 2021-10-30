@@ -26,7 +26,8 @@
         </div>
         <modal 
           v-show="showModal" 
-          v-on:close-modal="closeModal">
+          v-on:close-modal="closeModal"
+          :item="modalItem">
         </modal>
         <shopping-list
           v-show="showList"
@@ -62,8 +63,9 @@ export default {
               }
           )
       },
-      openModal(){
+      openModal(item){
         console.log('openModal');
+        this.modalItem = item;
         this.showModal = true;
       },
       closeModal(){
@@ -99,6 +101,7 @@ export default {
     return {
       showModal: false,
       showList: false,
+      modalItem: {},
       tasks: [
         {
           id: 1,

@@ -42,7 +42,7 @@
                     アイテム名
                 </label>
                 <input class="border rounded-lg px-4 py-2 text-xs"
-                    value="きゅうり"><!--カテゴリ名-->
+                    :value="form.name"><!--カテゴリ名-->
             </div>
             <div class="my-4 flex justify-end">
                 <!--編集項目のひとかたまり-->
@@ -51,7 +51,7 @@
                     数量
                 </label>
                 <input class="w-6 border rounded-lg"
-                    value="1"><!--数量-->
+                    :value="form.value"><!--数量-->
                 <input class="w-4" 
                     type="text"
                     value="本"><!--個数の単位-->
@@ -83,10 +83,25 @@
 export default {
     name: 'Modal',
     // emits: ['closeModal'], //何故か['close-modal']とするとモーダルが開かなくなる
+    props: ['item'],
     methods: {
         clickEvent(){
             this.$emit('closeModal')
         }
+    },
+    data(){
+        return {
+            form: {
+                id: '',
+                category_id: '',
+                name: '',
+                value: '',
+                period: ''
+            }
+        }
+    },
+    updated(){
+        Object.assign(this.form, this.item)
     }
 }
 </script>
