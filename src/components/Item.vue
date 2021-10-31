@@ -1,31 +1,37 @@
 <template>
     <div class="flex justify-end m-2 bg-white p-2"
-        v-for="(task, index) in category.tasks"
+        v-for="(item, index) in category.items"
         v-bind:key="index"
-        @click="$emit('openModal', task)">
+        @click="$emit('openModal', item)">
         <!--アイテム-->
         <div class="bg-red-500 -mt-2 h-7 w-2 mr-3"
-            v-if="task.period == 1">
+            v-if="item.period == 1">
         </div>
         <div class="bg-yellow-500 -mt-2 h-7 w-2 mr-3"
-            v-else-if="task.period == 2">
+            v-else-if="item.period == 2">
+        </div>
+        <div class="bg-green-500 -mt-2 h-7 w-2 mr-3"
+            v-else-if="item.period >= 3">
         </div>
         <div v-else class="-mt-2 h-7 w-2 mr-3">
         </div>
-        <div class="mr-auto">
+        <div class="mr-auto font-bold">
             <!--アイテム名-->
-            {{task.name}}
+            {{item.name}}
         </div>
         <div class="mr-3">
-            <button>
+            <button 
+                class="font-bold"
+                @click.stop="$emit('increment', item)">
                 <!--プラスボタン-->
                 ＋
             </button>
-            <input 
-                class="w-2" 
-                type="text" 
-                :value="task.value"><!--個数-->
-            <button>
+            <span class="border rounded-lg px-4 py-2 text-xs">
+                {{item.value}}個
+            </span>
+            <button 
+                class="font-black"
+                @click.stop="$emit('decrement', item)">
                 <!--マイナスボタン-->
                 −
             </button>
@@ -33,7 +39,7 @@
         <div class="mr-0">
             <!--あと何日-->
             <span class="border rounded-lg px-4 py-2 text-xs">
-                {{task.period}}日
+                {{item.period}}日
             </span>
         </div>
     </div>
@@ -42,7 +48,9 @@
 export default {
     name: 'Item',
     props: ['category'],
-    emits: ['openModal']
+    emits: ['openModal','increment','decrement'],
+    methods:{
+    }
 }
 </script>
 <style scoped>

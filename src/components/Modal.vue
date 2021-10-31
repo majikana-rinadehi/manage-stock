@@ -17,23 +17,13 @@
                     </button>
                 </div>
                 <div>
-                    <button class="px-4 py-2 bg-red-500 hover:bg-red-700 
-                    text-white rounded-lg font-bold text-xs">
-                    削除
-                    </button><!--削除-->
-                </div>
+                <button 
+                        class="px-4 py-2 bg-red-500 hover:bg-red-700 
+                    text-white rounded-lg font-bold text-xs"
+                        @click="$emit('delete-item', item)">
+                    アイテムを削除
+                </button><!--削除-->
             </div>
-            <div class="text font-bold">
-                <!--アイテム名-->
-            </div>
-            <div class="my-4">
-                <!--編集項目のひとかたまり-->
-                <label>
-                    <!--カテゴリ-->
-                    カテゴリ名
-                </label>
-                <input class="border rounded-lg px-4 py-2 text-xs"
-                    value="食材"><!--カテゴリ名-->
             </div>
             <div class="my-4">
                 <!--編集項目のひとかたまり-->
@@ -42,7 +32,7 @@
                     アイテム名
                 </label>
                 <input class="border rounded-lg px-4 py-2 text-xs"
-                    :value="form.name"><!--カテゴリ名-->
+                    v-model="form.name"><!--カテゴリ名-->
             </div>
             <div class="my-4 flex justify-end">
                 <!--編集項目のひとかたまり-->
@@ -51,30 +41,29 @@
                     数量
                 </label>
                 <input class="w-6 border rounded-lg"
-                    :value="form.value"><!--数量-->
+                    v-model.number="form.value"><!--数量-->
                 <input class="w-4" 
                     type="text"
                     value="本"><!--個数の単位-->
             </div>
-            <div class="my-4">
+            <div class="my-4 flex justify-end">
                 <!--編集項目のひとかたまり-->
-                <label>
+                <label class="mr-auto">
                     <!--賞味期限-->
-                    賞味期限
+                    残り日数
                 </label>
-                <input type="date" 
-                    class="border rounded-lg px-4 py-2 text-xs"
-                    value="2021/06/10"><!--賞味期限-->
+                <input type="text" 
+                    class="w-6 border rounded-lg"
+                
+                    v-model.number="form.period"><!--賞味期限-->
             </div>
-            <div class="my-4">
-                <!--編集項目のひとかたまり-->
-                <label>
-                    <!--なくなる日-->
-                    なくなる日
-                </label>
-                <input type="date" 
-                    class="border rounded-lg px-4 py-2 text-xs"
-                    value="2021/06/08"><!--なくなる日-->
+            <div>
+                <!-- 更新ボタン -->
+                <button class="px-4 py-2 bg-green-500 hover:bg-green-700 
+                    text-white rounded-lg font-bold text-xs"
+                    @click="$emit('updateItem', form)">
+                    更新
+                </button>
             </div>
         </div>
     </div>
@@ -83,7 +72,7 @@
 export default {
     name: 'Modal',
     // emits: ['closeModal'], //何故か['close-modal']とするとモーダルが開かなくなる
-    props: ['item'],
+    props: ['item','show'],
     methods: {
         clickEvent(){
             this.$emit('closeModal')
@@ -100,8 +89,16 @@ export default {
             }
         }
     },
-    updated(){
-        Object.assign(this.form, this.item)
+    watch:{
+        show(newValue){ // 親コンポーネントでshowModalが変化した時に呼び出される。
+            if(newValue){ //表示されたとき
+                Object.assign(this.form, this.item)
+                return
+            } 
+            Object.keys(this.form).forEach(key => {
+                this.form[key] = ''
+            })
+        }
     }
 }
 </script>

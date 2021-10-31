@@ -10,10 +10,10 @@
   <div 
     v-else
     class="flex justify-end mx-2 hover:bg-gray-300 rounded-lg">
-      <div class="mr-auto p-0">
+      <div class="justify-self-start mr-auto p-2">
           <input class="w-full h-6 p-2"
               type="text"
-              placeholder="新しいアイテム名を入力"
+              placeholder="新しいアイテム名"
               v-model="item_name"><!--新しいアイテムを追加-->
       </div>
       <div class="flex m-2">

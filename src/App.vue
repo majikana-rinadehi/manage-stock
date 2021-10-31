@@ -10,13 +10,15 @@
                   v-for="(category, index) in displayCategories"
                   v-bind:key="index">
                     <!--カテゴリアイテム-->
-                    <div class="font-bold">
+                    <div class="font-black text-lg">
                         <!--カテゴリ名-->
                         {{category.name}}
                     </div>
                     <Item
                       :category="category"
-                      @open-modal="openModal"/>
+                      @open-modal="openModal"
+                      @increment="increment"
+                      @decrement="decrement"/>
                 <ItemAdd 
                     @item-added='itemAdd' 
                     :category_id="category.id"> <!--タスク追加コンポーネント-->
@@ -26,12 +28,17 @@
         </div>
         <modal 
           v-show="showModal" 
-          v-on:close-modal="closeModal"
-          :item="modalItem">
+          @close-modal="closeModal"
+          @delete-item="deleteItem"
+          @update-item="updateItem"
+          :item="modalItem"
+          :show="showModal">
         </modal>
         <shopping-list
           v-show="showList"
-          v-on:close-list="closeList">
+          :show="showList"
+          :display-categories="displayCategories"
+          @close-list="closeList">
 
         </shopping-list>
     </body>
@@ -55,7 +62,7 @@ export default {
   name: 'App',
   methods: {
       itemAdd(item_name, category_id){
-          this.tasks.push(
+          this.items.push(
               {
                   id: Date.now(),
                   category_id: category_id,
@@ -72,6 +79,32 @@ export default {
         console.log('closeModal');
         this.showModal = false;
       },
+      deleteItem(deleteItem){
+        console.log('deleteItem:' + deleteItem);
+        this.items.forEach((item, i) => {
+          if (deleteItem.id === item.id){
+            this.items.splice(i,1)
+            return 
+          } 
+        })
+        this.showModal=false
+      },
+      updateItem(form){
+        console.log('updateItem' + form);
+        let item = this.items.find(item => item.id === form.id)
+        Object.assign(item, form)
+        this.showModal = false
+      },
+      increment(incrementItem){
+        console.log('increment' + item);
+        let item = this.items.find(item => item.id === incrementItem.id)
+        item.value += 1
+      },
+      decrement(decrementItem){
+        console.log('decrement' + item);
+        let item = this.items.find(item => item.id === decrementItem.id)
+        item.value -= 1
+      },
       openList(){
         console.log('openList');
         this.showList = true;
@@ -84,14 +117,14 @@ export default {
   computed: {
     displayCategories(){
       let categories = [];
-      let tasks = '';
+      let items = '';
       this.categories.map(category => {
-        tasks = this.tasks.filter(task =>
+        items = this.items.filter(task =>
           task.category_id === category.id);
         categories.push({
           id: category.id,
           name: category.name,
-          tasks: tasks
+          items: items
         })
       })
       return categories;
@@ -102,7 +135,7 @@ export default {
       showModal: false,
       showList: false,
       modalItem: {},
-      tasks: [
+      items: [
         {
           id: 1,
           category_id: 1,
@@ -115,14 +148,14 @@ export default {
           category_id: 1,
           name: 'たまご',
           value: 1,
-          period: 1
+          period: 2
         },
         {
           id: 3,
           category_id: 1,
           name: '納豆',
           value: 1,
-          period: 2
+          period: 3
         },
         {
           id: 4,
