@@ -1,49 +1,3 @@
-<template>
-  <body> 
-        <Header
-          @open-list="openList"/>
-        <div class="my-5">
-            <!--①,②,③-->
-            <div class="flex">
-                <!--①:カテゴリアイテム-->
-                <div class="bg-gray-200 m-2 p-2 text-sm mx-auto" style="min-width: 420px;"
-                  v-for="(category, index) in displayCategories"
-                  v-bind:key="index">
-                    <!--カテゴリアイテム-->
-                    <div class="font-black text-lg">
-                        <!--カテゴリ名-->
-                        {{category.name}}
-                    </div>
-                    <Item
-                      :category="category"
-                      @open-modal="openModal"
-                      @increment="increment"
-                      @decrement="decrement"/>
-                <ItemAdd 
-                    @item-added='itemAdd' 
-                    :category_id="category.id"> <!--タスク追加コンポーネント-->
-                </ItemAdd>
-                </div>
-            </div>
-        </div>
-        <modal 
-          v-show="showModal" 
-          @close-modal="closeModal"
-          @delete-item="deleteItem"
-          @update-item="updateItem"
-          :item="modalItem"
-          :show="showModal">
-        </modal>
-        <shopping-list
-          v-show="showList"
-          :show="showList"
-          :display-categories="displayCategories"
-          @close-list="closeList">
-
-        </shopping-list>
-    </body>
-</template>
-
 <script>
 import ItemAdd from './ItemAdd.vue'
 import Header from './Header.vue'
@@ -207,13 +161,51 @@ export default {
 }
 </script>
 
+<template>
+  <body> 
+        <Header
+          @open-list="openList"/>
+        <div class="my-5">
+            <!--①,②,③-->
+            <div class="flex">
+                <!--①:カテゴリアイテム-->
+                <div class="bg-gray-200 m-2 p-2 text-sm mx-auto" style="min-width: 420px;"
+                  v-for="(category, index) in displayCategories"
+                  v-bind:key="index">
+                    <!--カテゴリアイテム-->
+                    <div class="font-black text-lg">
+                        <!--カテゴリ名-->
+                        {{category.name}}
+                    </div>
+                    <Item
+                      :category="category"
+                      @open-modal="openModal"
+                      @increment="increment"
+                      @decrement="decrement"/>
+                <ItemAdd 
+                    @item-added='itemAdd' 
+                    :category_id="category.id"> <!--タスク追加コンポーネント-->
+                </ItemAdd>
+                </div>
+            </div>
+        </div>
+        <modal 
+          v-show="showModal" 
+          @close-modal="closeModal"
+          @delete-item="deleteItem"
+          @update-item="updateItem"
+          :item="modalItem"
+          :show="showModal">
+        </modal>
+        <shopping-list
+          v-show="showList"
+          :show="showList"
+          :display-categories="displayCategories"
+          @close-list="closeList">
+
+        </shopping-list>
+    </body>
+</template>
+
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
 </style>

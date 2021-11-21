@@ -17,7 +17,6 @@ const logginIn = async () => {
 </script>
 <template>
     <div class="login">
-        login
         <form action="">
             <div>
                 <label for="">email</label>
