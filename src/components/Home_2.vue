@@ -5,8 +5,26 @@ import Item from './Item.vue'
 
 const { 
         displayCategories,
-        createItem
+        createItem,
+        deleteAllItems,
+        updateItem
     } = useItems()
+
+const testCreateItem = () => {
+  createItem("test_name", "1", "食材")
+}
+
+const testUpdateItem = () => {
+  updateItem({
+    key: "aaa",
+    category_id: 1,
+    category_name: "食材",
+    name: "updated",
+    value: 1,
+    period: 1,
+    unit_name: "本"
+  })
+}
 </script>
 
 <template>
@@ -17,6 +35,9 @@ const {
     <div> {{ itemsRef }}</div>
     <div> {{ categoriesRef }}</div>
     <div> {{ user }}</div> -->
+    <button @click="deleteAllItems">deleteAll</button>
+    <button @click="testCreateItem">testCreateItem</button>
+    <button @click="testUpdateItem">testUpdateItem</button>
      <div class="my-5">
             <!--①,②,③-->
             <div class="flex">

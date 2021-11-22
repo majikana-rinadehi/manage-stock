@@ -1,9 +1,9 @@
 // db -> itemsRef -> displayItems
 import { useDatabase } from './useDatabase.js'
-import { onValue, update, push } from 'firebase/database'
+import { onValue, update, push, set } from 'firebase/database'
 import { ref, computed, onMounted } from 'vue'
 
-const { fetchAllItems, fetchAllCategories } = useDatabase()
+const { fetchAllItems, fetchAllCategories, deleteAllItems } = useDatabase()
 
 export default function useItems(){
     const itemsRef = ref(null)
@@ -60,7 +60,7 @@ export default function useItems(){
     }
     const createItem = (item_name, category_id, category_name) => {
         const updates = {}
-        const newPostKey = push(itemsRef).key // e.g. -Mns223jg86j8yHEkK43
+        const newPostKey = push(itemsRef.value).key // e.g. -Mns223jg86j8yHEkK43
         const newItem = {
             "category_id": category_id,
             "category_name": category_name,
@@ -70,7 +70,13 @@ export default function useItems(){
             "unit_name": ""
         }
         updates[newPostKey] = newItem
-        update(itemsRef, updates)
+        update(itemsRef.value, updates)
+    }
+
+    const updateItem = (item) => {
+        const key = item.key
+        const updateRef = itemsRef.value + "/" + key
+        set(updateRef, item)
     }
 
     onMounted(() => {
@@ -144,6 +150,8 @@ export default function useItems(){
         displayCategories, 
         getAllItems,
         getAllCategories,
-        createItem
+        createItem,
+        deleteAllItems,
+        updateItem
     }
 }

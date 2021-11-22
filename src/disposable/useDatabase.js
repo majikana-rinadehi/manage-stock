@@ -1,4 +1,4 @@
-import { getDatabase, ref } from 'firebase/database'
+import { getDatabase, ref, remove } from 'firebase/database'
 import { useAuth } from './useAuth.js'
 
 const { user } = useAuth()
@@ -18,7 +18,11 @@ const useDatabase = () => {
         return categoriesRef
     }
 
-    return { fetchAllItems, fetchAllCategories }
+    const deleteAllItems = () => {
+        return remove(fetchAllItems()) 
+    }
+
+    return { fetchAllItems, fetchAllCategories, deleteAllItems }
 }
 
 export { useDatabase }
