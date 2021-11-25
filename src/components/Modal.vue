@@ -20,7 +20,8 @@
                 <button 
                         class="px-4 py-2 bg-red-500 hover:bg-red-700 
                     text-white rounded-lg font-bold text-xs"
-                        @click="$emit('delete-item', item)">
+                        @click="$emit('deleteItem', form.id),
+                                $emit('closeModal')">
                     アイテムを削除
                 </button><!--削除-->
             </div>
@@ -43,8 +44,18 @@
                 <input class="w-6 border rounded-lg"
                     v-model.number="form.value"><!--数量-->
                 <input class="w-4" 
-                    type="text"
-                    value="本"><!--個数の単位-->
+                    type="text">
+            </div>
+            <div class="my-4 flex justify-end">
+                <!--編集項目のひとかたまり-->
+                <label class="mr-auto">
+                    <!--個数の単位-->
+                    単位
+                </label>
+                <input class="w-6 border rounded-lg"
+                    v-model.number="form.unit_name"><!--数量-->
+                <input class="w-4" 
+                    type="text"><!--単位-->
             </div>
             <div class="my-4 flex justify-end">
                 <!--編集項目のひとかたまり-->
@@ -61,7 +72,8 @@
                 <!-- 更新ボタン -->
                 <button class="px-4 py-2 bg-green-500 hover:bg-green-700 
                     text-white rounded-lg font-bold text-xs"
-                    @click="$emit('updateItem', form)">
+                    @click="$emit('updateItem', form),
+                            $emit('closeModal')">
                     更新
                 </button>
             </div>
@@ -83,9 +95,11 @@ export default {
             form: {
                 id: '',
                 category_id: '',
+                category_name:'',
                 name: '',
                 value: '',
-                period: ''
+                period: '',
+                unit_name: ''
             }
         }
     },

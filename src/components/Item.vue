@@ -47,7 +47,7 @@
 <script>
 export default {
     name: 'Item',
-    props: ['category'],
+    props: ['category','category_id'],
     emits: ['openModal','increment','decrement'],
     methods:{
     }

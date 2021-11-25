@@ -35,7 +35,7 @@ const logginOut = async () => {
         </div>
         <div class="w-1/4" v-else>   
             <router-link to="/login">
-                <button class="w-full h-full text-5xl font-bold">
+                <button class="w-full h-full text-5xl font-bold bg-green-500">
                     Login
                 </button>
             </router-link>

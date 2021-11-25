@@ -1,34 +1,44 @@
 <script setup>
-import useItems from '../disposable/useItems.js'
-import ItemAdd from './ItemAdd.vue'
+import useDatabase from '../disposable/useDatabase.js'
+import ItemAdd_2 from './ItemAdd_2.vue'
 import Item from './Item.vue'
+import Modal from './Modal.vue'
+import { ref, onMounted } from 'vue'
 
 const { 
-        displayCategories,
-        createItem,
-        deleteAllItems,
-        updateItem
-    } = useItems()
+  useListener,
+  computedCategories,
+  addItem,
+  updateItem,
+  deleteItem
+} = useDatabase()
 
-const testCreateItem = () => {
-  createItem("test_name", "1", "食材")
+const {
+  setListener, 
+  items,
+  categories,
+} = useListener()
+
+onMounted(setListener)
+
+const showModal = ref(false)
+const modalItem = ref("")
+
+const openModal = (item) => {
+  showModal.value = true
+  modalItem.value = item
 }
 
-const testUpdateItem = () => {
-  updateItem({
-    key: "aaa",
-    category_id: 1,
-    category_name: "食材",
-    name: "updated",
-    value: 1,
-    period: 1,
-    unit_name: "本"
-  })
+const closeModal = () => {
+  showModal.value = false
 }
 </script>
 
 <template>
   <body> 
+    <div>{{ items }}</div>
+    <div>{{ categories }}</div>
+    <div>{{ computedCategories }}</div>
     <!-- <div> {{ items }}</div>
     <div> {{ categories }}</div>
     <div> {{ displayCategories }}</div>
@@ -43,7 +53,7 @@ const testUpdateItem = () => {
             <div class="flex">
                 <!--①:カテゴリアイテム-->
                 <div class="bg-gray-200 m-2 p-2 text-sm mx-auto" style="min-width: 420px;"
-                  v-for="(category, index) in displayCategories"
+                  v-for="(category, index) in computedCategories"
                   v-bind:key="index">
                     <!--カテゴリアイテム-->
                     <div class="font-black text-lg">
@@ -51,17 +61,26 @@ const testUpdateItem = () => {
                         {{category.name}}
                     </div>
                     <Item
-                      @item-added="createItem"
+                      @open-modal="openModal"
                       :category="category"
                       :category_id="category.id"
-                      :category_name="category.name"
                       />
-                <ItemAdd 
+                <ItemAdd_2 
+                    @item-added="addItem"
+                    :category_name="category.name"
                     :category_id="category.id"> <!--タスク追加コンポーネント-->
-                </ItemAdd>
+                </ItemAdd_2>
                 </div>
             </div>
-        </div>   
+        </div> 
+        <modal 
+          v-show="showModal" 
+          @close-modal="closeModal"
+          @delete-item="deleteItem"
+          @update-item="updateItem"
+          :item="modalItem"
+          :show="showModal">
+        </modal>  
   </body>
 </template>
 

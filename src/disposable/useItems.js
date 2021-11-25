@@ -76,6 +76,7 @@ export default function useItems(){
     const updateItem = (item) => {
         const key = item.key
         const updateRef = itemsRef.value + "/" + key
+        console.log(updateRef);
         set(updateRef, item)
     }
 
