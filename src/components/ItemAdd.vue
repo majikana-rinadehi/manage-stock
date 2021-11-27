@@ -36,7 +36,8 @@
 <script>
 export default {
   name: 'ItemAdd',
-  props: ['category_id'],
+  // props: ['category_id', 'category_name'],
+  emits: ['ItemAdded'],
   data() {
     return {
       show: false, // アイテム追加欄の表示非表示
@@ -53,7 +54,7 @@ export default {
     },
     addItem (){
       if(this.item_name !== ''){
-        this.$emit('ItemAdded', this.item_name, this.category_id);
+        this.$emit('ItemAdded', this.item_name, this.category_id, this.category_name);
         this.show = false;
         this.item_name = '';
       }

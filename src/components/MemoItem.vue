@@ -27,7 +27,7 @@
                 ＋
             </button>
             <span class="border rounded-lg px-4 py-2 text-xs">
-                {{item.value}}個
+                {{item.value}}{{ item.unit_name}}
             </span>
             <button 
                 class="font-black"

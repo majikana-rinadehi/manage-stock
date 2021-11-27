@@ -6,7 +6,7 @@
             class="fixed inset-0 bg-gray-400 opacity-50">
             <!--モーダルウィンドウ-->
         </div>
-        <div class="bg-white relative rounded-xl p-5"
+        <div class=" bg-white relative rounded-xl p-5"
             style="max-width: 400px;">
             <div class="flex justify-end">
                 <!--戻るボタン、削除ボタン-->
@@ -20,7 +20,8 @@
                 <button 
                         class="px-4 py-2 bg-red-500 hover:bg-red-700 
                     text-white rounded-lg font-bold text-xs"
-                        @click="$emit('delete-item', item)">
+                        @click="$emit('deleteItem', form.id),
+                                $emit('closeModal')">
                     アイテムを削除
                 </button><!--削除-->
             </div>
@@ -40,11 +41,17 @@
                     <!--数量-->
                     数量
                 </label>
-                <input class="w-6 border rounded-lg"
+                <input class="w-14 border rounded-lg"
                     v-model.number="form.value"><!--数量-->
-                <input class="w-4" 
-                    type="text"
-                    value="本"><!--個数の単位-->
+            </div>
+            <div class="my-4 flex justify-end">
+                <!--編集項目のひとかたまり-->
+                <label class="mr-auto">
+                    <!--個数の単位-->
+                    単位
+                </label>
+                <input class="w-14 border rounded-lg"
+                    v-model.number="form.unit_name">
             </div>
             <div class="my-4 flex justify-end">
                 <!--編集項目のひとかたまり-->
@@ -53,7 +60,7 @@
                     残り日数
                 </label>
                 <input type="text" 
-                    class="w-6 border rounded-lg"
+                    class="w-14 border rounded-lg"
                 
                     v-model.number="form.period"><!--賞味期限-->
             </div>
@@ -61,7 +68,8 @@
                 <!-- 更新ボタン -->
                 <button class="px-4 py-2 bg-green-500 hover:bg-green-700 
                     text-white rounded-lg font-bold text-xs"
-                    @click="$emit('updateItem', form)">
+                    @click="$emit('updateItem', form),
+                            $emit('closeModal')">
                     更新
                 </button>
             </div>
@@ -83,9 +91,11 @@ export default {
             form: {
                 id: '',
                 category_id: '',
+                category_name:'',
                 name: '',
                 value: '',
-                period: ''
+                period: '',
+                unit_name: ''
             }
         }
     },

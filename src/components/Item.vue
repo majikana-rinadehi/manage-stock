@@ -1,6 +1,31 @@
+<script setup>
+import { defineProps, defineEmits, toRefs } from 'vue'
+import useItemFilters from '../disposable/useItemFilters.js'
+import useDatabase from '../disposable/useDatabase.js'
+
+const props = defineProps({
+    category: Object,
+})
+
+defineEmits(['openModal','incrementValue','decrementValue'])
+const {
+    deleteAllItems
+} = useDatabase()
+const { category } = toRefs(props)
+console.log(category.value);
+const { 
+    filteredDisplayItems,
+    setFilter
+} = useItemFilters(category)
+</script>
 <template>
+    <div class="flex justify-evenly my-2">
+        <button @click="setFilter('sortByPeriod')">期限で並び替え</button>
+        <button @click="setFilter('sortByValue')">数量で並び替え</button>
+        <button @click="deleteAllItems(category)">全削除</button>
+    </div>
     <div class="flex justify-end m-2 bg-white p-2"
-        v-for="(item, index) in category.items"
+        v-for="(item, index) in filteredDisplayItems"
         v-bind:key="index"
         @click="$emit('openModal', item)">
         <!--アイテム-->
@@ -22,16 +47,16 @@
         <div class="mr-3">
             <button 
                 class="font-bold"
-                @click.stop="$emit('increment', item)">
+                @click.stop="$emit('incrementValue', item.id)">
                 <!--プラスボタン-->
                 ＋
             </button>
             <span class="border rounded-lg px-4 py-2 text-xs">
-                {{item.value}}個
+                {{item.value + item.unit_name}}
             </span>
             <button 
                 class="font-black"
-                @click.stop="$emit('decrement', item)">
+                @click.stop="$emit('decrementValue', item.id)">
                 <!--マイナスボタン-->
                 −
             </button>
@@ -44,15 +69,7 @@
         </div>
     </div>
 </template>
-<script>
-export default {
-    name: 'Item',
-    props: ['category'],
-    emits: ['openModal','increment','decrement'],
-    methods:{
-    }
-}
-</script>
+
 <style scoped>
 
 </style>

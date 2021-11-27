@@ -1,0 +1,76 @@
+{
+    "users" : {
+      "Ua4qW1A0OQQV9fKa04W0oqKlQyv2" : {
+        "items": {
+          "aaa": {
+            "category_id": 1,
+            "category_name": "食材",
+            "name": "きゅうり",
+            "value": 1,
+            "period": 1,
+            "unit_name": "本"
+          },
+          "1": {
+            "category_id": 1,
+            "category_name": "食材",
+            "name": "たまご",
+            "value": 1,
+            "period": 2,
+            "unit_name": "個"
+          },
+          "2": {
+            "category_id": 1,
+            "category_name": "食材",
+            "name": "納豆",
+            "value": 1,
+            "period": 3,
+            "unit_name": "パック"
+          },
+          "3": {
+            "category_id": 2,
+            "category_name": "消耗品",
+            "name": "洗剤",
+            "value": 1,
+            "period": 1,
+            "unit_name": "本"
+          },
+          "4": {
+            "category_id": 2,
+            "category_name": "消耗品",
+            "name": "バスマジックリン",
+            "value": 1,
+            "period": 2,
+            "unit_name": "本"
+          },
+          "5": {
+            "category_id": 3,
+            "category_name": "掃除",
+            "name": "排水溝",
+            "value": 1,
+            "period": 1,
+            "unit_name": ""
+          },
+          "6": {
+            "category_id": 3,
+            "category_name": "掃除",
+            "name": "台所",
+            "value": 1,
+            "period": 2,
+            "unit_name": ""
+          }
+        },
+        "categories": {
+          "1":{
+            "name": "食材"
+          },
+          "2": {
+            "name": "消耗品"
+          },
+          "3": {
+            "name": "掃除"
+          }
+        }
+      }
+    }
+  }
+  
