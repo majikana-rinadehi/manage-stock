@@ -30,12 +30,12 @@ const logginOut = async () => {
         </div>
         <div class="w-1/4" 
             v-if="isAuthenticated">
-            <button class="w-full h-full text-5xl font-bold bg-red-500"
+            <button class="w-full h-full text-5xl font-bold bg-red-500 hover:bg-red-700"
                 @click="logginOut">logout</button>
         </div>
         <div class="w-1/4" v-else>   
             <router-link to="/login">
-                <button class="w-full h-full text-5xl font-bold bg-green-500">
+                <button class="w-full h-full text-5xl font-bold bg-green-500 hover:bg-green-300">
                     Login
                 </button>
             </router-link>

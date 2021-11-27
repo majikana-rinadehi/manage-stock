@@ -6,7 +6,7 @@
             class="fixed inset-0 bg-gray-400 opacity-50">
             <!--モーダルウィンドウ-->
         </div>
-        <div class="bg-white relative rounded-xl p-5"
+        <div class=" bg-white relative rounded-xl p-5"
             style="max-width: 400px;">
             <div class="flex justify-end">
                 <!--戻るボタン、削除ボタン-->
@@ -41,10 +41,8 @@
                     <!--数量-->
                     数量
                 </label>
-                <input class="w-6 border rounded-lg"
+                <input class="w-14 border rounded-lg"
                     v-model.number="form.value"><!--数量-->
-                <input class="w-4" 
-                    type="text">
             </div>
             <div class="my-4 flex justify-end">
                 <!--編集項目のひとかたまり-->
@@ -52,10 +50,8 @@
                     <!--個数の単位-->
                     単位
                 </label>
-                <input class="w-6 border rounded-lg"
-                    v-model.number="form.unit_name"><!--数量-->
-                <input class="w-4" 
-                    type="text"><!--単位-->
+                <input class="w-14 border rounded-lg"
+                    v-model.number="form.unit_name">
             </div>
             <div class="my-4 flex justify-end">
                 <!--編集項目のひとかたまり-->
@@ -64,7 +60,7 @@
                     残り日数
                 </label>
                 <input type="text" 
-                    class="w-6 border rounded-lg"
+                    class="w-14 border rounded-lg"
                 
                     v-model.number="form.period"><!--賞味期限-->
             </div>

@@ -1,9 +1,12 @@
 <script setup>
 import Nav from './components/Nav.vue'
+import Message from './components/Message.vue'
+
 </script>
 
 <template>
   <Nav/>
+  <Message/>
   <router-view></router-view>
 </template>
 

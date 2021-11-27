@@ -1,6 +1,5 @@
 {
   "hosting": {
-    "site": "manage-stock-57c9a",
     "public": "dist",
     "ignore": [
       "firebase.json",
@@ -21,5 +20,8 @@
     "ui": {
       "enabled": true
     }
+  },
+  "functions": {
+    "source": "functions"
   }
 }

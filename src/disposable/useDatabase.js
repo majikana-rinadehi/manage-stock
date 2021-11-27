@@ -1,5 +1,4 @@
 /* eslint-disable no-unused-vars */
-
 import { 
     query,
     onSnapshot,
@@ -7,15 +6,22 @@ import {
     doc,
     addDoc,
     updateDoc,
-    deleteDoc
+    deleteDoc,
+    increment,
+    writeBatch
 } from 'firebase/firestore'
 import { db } from '../settings/firebase.js'
 import { useAuth } from './useAuth'
 import { ref, computed } from 'vue'
+import  useMessage  from './useMessage.js'
 
 const {
     user
 } = useAuth()
+
+const {
+    setMessage
+} = useMessage()
 
 export default function useDatabase(){
     const items = ref([])
@@ -43,18 +49,6 @@ export default function useDatabase(){
                     })
                 })
                 items.value = _items
-    
-                querySnapshot.docChanges().forEach(change => {
-                    if ( change.type === "added"){
-                        console.log("New city: ", change.doc.data());
-                    }
-                    if ( change.type === "modified"){
-                        console.log("Modified city: ", change.doc.data());
-                    }
-                    if ( change.type === "removed"){
-                        console.log("Removed city: ", change.doc.data());
-                    }
-                })
             })
 
             // listener for categories
@@ -68,18 +62,6 @@ export default function useDatabase(){
                     })
                 })
                 categories.value = _categories
-    
-                querySnapshot.docChanges().forEach(change => {
-                    if ( change.type === "added"){
-                        console.log("New city: ", change.doc.data());
-                    }
-                    if ( change.type === "modified"){
-                        console.log("Modified city: ", change.doc.data());
-                    }
-                    if ( change.type === "removed"){
-                        console.log("Removed city: ", change.doc.data());
-                    }
-                })
             })    
         }
     
@@ -91,17 +73,17 @@ export default function useDatabase(){
     const computedCategories = computed(() => {
         let displayCategories = []
         categories.value.map(category => {
-          let dispItems = ""
+          let dispItems = ref("")
           console.log(items.value);
-          dispItems = items.value.filter(item => {
+          dispItems.value = items.value.filter(item => {
               console.log(item.category_id, category.id);
             return item.category_id.toString() === category.id // return を忘れないこと!
           })
-          console.log(dispItems);
+          console.log(dispItems.value);
           displayCategories.push({
             id: category.id,
             name: category.name,
-            items: dispItems
+            items: dispItems.value
           })
         })
         return displayCategories
@@ -118,6 +100,7 @@ export default function useDatabase(){
             "unit_name": ""
         })
         console.log(docRef);
+        setMessage("アイテムを追加しました","info",3000)
       }
 
     const updateItem = async (form) => {
@@ -125,8 +108,8 @@ export default function useDatabase(){
         const itemId = form.id
         console.log("form: ",form);
         console.log("itemId: ",itemId);
-        const inninnRef = doc(db, `users/${uid}/items/${itemId}`)
-        await updateDoc(inninnRef, {
+        const itemRef = doc(db, `users/${uid}/items/${itemId}`)
+        await updateDoc(itemRef, {
             "category_id": form.category_id,
             "category_name": form.category_name,
             "name": form.name,
@@ -134,18 +117,48 @@ export default function useDatabase(){
             "period": form.period,
             "unit_name": form.unit_name
         })
+        setMessage("アイテムを更新しました","info",3000)
     }
 
     const deleteItem = async (itemId) => {
         const uid = user.value ? user.value.uid : ""
         await deleteDoc(doc(db, `users/${uid}/items/${itemId}`))
+        setMessage("アイテムを削除しました","info",3000)
+    }
+    
+    const deleteAllItems = async (category) => {
+        const uid = user.value ? user.value.uid : ""
+        const batch = writeBatch(db)
+        category.items.forEach(item => {
+            const itemId = item.id
+            batch.delete(doc(db, `users/${uid}/items/${itemId}`))
+        })
+        await batch.commit()
+        setMessage("アイテムを削除しました","info",3000)
+    }
+
+    const incrementValue = async (itemId) => {
+        const uid = user.value ? user.value.uid : ""
+        await updateDoc(doc(db, `users/${uid}/items/${itemId}`), {
+            value: increment(1)
+        })
+    }
+
+    const decrementValue = async (itemId) => {
+        const uid = user.value ? user.value.uid : ""
+        await updateDoc(doc(db, `users/${uid}/items/${itemId}`), {
+            value: increment(-1)
+        })
     }
     return {
         useListener,
         computedCategories,
         addItem,
         updateItem,
-        deleteItem
+        deleteItem,
+        incrementValue,
+        decrementValue,
+        deleteAllItems
     }
 }
 /* eslint-enable no-unused-vars */
