@@ -22,5 +22,13 @@ export default function useCapture(){
                 resultElement.appendChild(canvas)
             })
     }
-    return { captureMemoItems }
+
+    const deleteCapture = () => {
+        const resultElement = document.getElementById("result")
+
+        if (resultElement.hasChildNodes()){
+            resultElement.removeChild(document.getElementById('canvas'))
+        } 
+    }
+    return { captureMemoItems, deleteCapture }
 }

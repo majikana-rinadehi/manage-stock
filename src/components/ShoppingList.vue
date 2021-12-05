@@ -5,7 +5,8 @@ import useCapture from '../disposable/useCapture.js'
 import { defineProps, ref, toRefs } from 'vue'
 
 const {
-    captureMemoItems
+    captureMemoItems,
+    deleteCapture
 } = useCapture()
 
 const props = defineProps({
@@ -65,11 +66,13 @@ const capture = () => {
                     </button>
                 </div>
             </div>
-            <!-- アイテム表示欄 スクロールする -->
+            <!-- アイテム表示欄 -->
             <div>
+                <button @click="deleteCapture">☓</button>
                 <div id="result">
                 </div>
             </div>
+            <!-- アイテム表示欄 スクロールする -->
             <div id="capture-items-target" 
                 class="overflow-y-scroll flex-col justify-between bg-gray-200 m-4 p-2 text-sm"
                 style="max-height: 70%;">
