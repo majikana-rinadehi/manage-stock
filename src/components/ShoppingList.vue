@@ -1,5 +1,5 @@
 <script setup>
-import MemoItem from './MemoItem.vue'
+import MemoCategories from './MemoCategories.vue'
 import ShoppingFooter from './ShoppingFooter.vue'
 import useCapture from '../disposable/useCapture.js'
 import { defineProps, ref, toRefs } from 'vue'
@@ -73,23 +73,32 @@ const capture = () => {
                 </div>
             </div>
             <!-- アイテム表示欄 スクロールする -->
-            <div id="capture-items-target" 
+            <!-- <div id="capture-items-target" 
                 class="overflow-y-scroll flex-col justify-between bg-gray-200 m-4 p-2 text-sm"
                 style="max-height: 70%;">
-                <!-- アイテムをカテゴリごとに表示 -->
+                アイテムをカテゴリごとに表示
                 <div class="bg-gray-200 p-2 text-sm m-auto" style="min-width: 420px;"
                   v-for="(category, index) in displayCategories"
                   v-bind:key="index">
-                    <!--カテゴリアイテム-->
+                    カテゴリアイテム
                     <div class="font-black text-lg">
-                        <!--カテゴリ名-->
+                        カテゴリ名
                         {{category.name}}
                     </div>
                     <MemoItem
                        :reset="resetToggle"
                        :show="show"
                        :category="category"/>
-            </div>
+            </div> -->
+            <div id="capture-items-target" 
+                class="overflow-y-scroll flex-col justify-between bg-gray-200 m-4 p-2 text-sm"
+                style="max-height: 70%;">
+                <!-- アイテムをカテゴリごとに表示 -->
+                <MemoCategories
+                    :display-categories="displayCategories"
+                    :reset="resetToggle"
+                    :show="show"
+                    />
         </div>
         <ShoppingFooter
             @capture-memo-items="capture"/>

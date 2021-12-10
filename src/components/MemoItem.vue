@@ -97,12 +97,10 @@ export default {
             // オブジェクトの配列についてはObject.assign()で
             // ディープコピーできなかったので以下の方法で行う。
             // 参考: https://crieit.net/posts/JavaScript
-            this.memoItems = this.category.items 
-                .map((obj) => Object.assign({},obj));
+            this.memoItems = Object.assign([], this.category.items)
         },
         reset(){
-            this.memoItems = this.category.items
-                .map((obj) => Object.assign({},obj));
+            this.memoItems = Object.assign([], this.category.items)
         }
     }
 }
