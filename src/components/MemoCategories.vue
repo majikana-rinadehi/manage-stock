@@ -64,7 +64,9 @@ watch(reset, () => {
     <div><button @click="filter = (item) => item.period === 1">期限残り1日</button></div>
     <div><button @click="filter = null">フィルターなし</button></div>
 
-    <div class="bg-gray-200 p-2 text-sm m-auto" style="min-width: 420px;">
+    <!-- id="capture-items-target"をここに移動 -->
+    <div id="capture-items-target" 
+        class="bg-gray-200 p-2 text-sm m-auto" style="min-width: 420px;">
                     <!--カテゴリアイテム-->
         <div class="font-black text-lg">
             <!--カテゴリ名-->

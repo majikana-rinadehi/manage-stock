@@ -19,6 +19,7 @@ export default function useCapture(){
                     resultElement.removeChild(document.getElementById('canvas'))
                 }
                 canvas.setAttribute('id','canvas')
+                canvas.setAttribute('class','mx-auto')
                 resultElement.appendChild(canvas)
             })
     }
