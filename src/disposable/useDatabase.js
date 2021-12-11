@@ -80,7 +80,7 @@ export default function useDatabase(){
             return item.category_id.toString() === category.id // return を忘れないこと!
           })
           console.log(dispItems.value);
-          displayCategories.push({
+          displayCategories.push({  
             id: category.id,
             name: category.name,
             items: dispItems.value

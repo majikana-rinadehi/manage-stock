@@ -1,11 +1,12 @@
 <script setup>
-import MemoItem from './MemoItem.vue'
+import MemoCategories from './MemoCategories.vue'
 import ShoppingFooter from './ShoppingFooter.vue'
 import useCapture from '../disposable/useCapture.js'
 import { defineProps, ref, toRefs } from 'vue'
 
 const {
-    captureMemoItems
+    captureMemoItems,
+    deleteCapture
 } = useCapture()
 
 const props = defineProps({
@@ -21,6 +22,7 @@ const {
 } = toRefs(props)
 
 const resetToggle = ref(1)
+const showCapture = ref(false)
 
 const resetItems = () => {
     resetToggle.value *= -1
@@ -29,6 +31,14 @@ const resetItems = () => {
 const capture = () => {
     console.log("capture");
     captureMemoItems()
+}
+
+function openCapture(){
+    showCapture.value = true
+}
+function closeCapture(){
+    deleteCapture()
+    showCapture.value = false
 }
 </script>
 
@@ -65,31 +75,28 @@ const capture = () => {
                     </button>
                 </div>
             </div>
-            <!-- アイテム表示欄 スクロールする -->
-            <div>
-                <div id="result">
+            <!-- アイテムキャプチャー画像表示欄 -->
+            <div class="mx-auto" 
+                v-show="showCapture">
+                <button @click="closeCapture">画像を削除</button>
+                <div class="mx-auto" id="result">
                 </div>
             </div>
-            <div id="capture-items-target" 
-                class="overflow-y-scroll flex-col justify-between bg-gray-200 m-4 p-2 text-sm"
+            <!-- capture-items-target を
+            MemoCategories内の子孫要素に移動 -->
+            <!-- <div id="capture-items-target"  -->
+            <div class="overflow-y-scroll flex-col justify-between bg-gray-200 m-4 p-2 text-sm"
                 style="max-height: 70%;">
                 <!-- アイテムをカテゴリごとに表示 -->
-                <div class="bg-gray-200 p-2 text-sm m-auto" style="min-width: 420px;"
-                  v-for="(category, index) in displayCategories"
-                  v-bind:key="index">
-                    <!--カテゴリアイテム-->
-                    <div class="font-black text-lg">
-                        <!--カテゴリ名-->
-                        {{category.name}}
-                    </div>
-                    <MemoItem
-                       :reset="resetToggle"
-                       :show="show"
-                       :category="category"/>
-            </div>
+                <MemoCategories
+                    :display-categories="displayCategories"
+                    :reset="resetToggle"
+                    :show="show"
+                    />
         </div>
         <ShoppingFooter
-            @capture-memo-items="capture"/>
+            @capture-memo-items="capture"
+            @open-capture="openCapture"/>
     </div>
     </div>
 </template>

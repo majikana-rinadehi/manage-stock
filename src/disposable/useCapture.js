@@ -19,8 +19,17 @@ export default function useCapture(){
                     resultElement.removeChild(document.getElementById('canvas'))
                 }
                 canvas.setAttribute('id','canvas')
+                canvas.setAttribute('class','mx-auto')
                 resultElement.appendChild(canvas)
             })
     }
-    return { captureMemoItems }
+
+    const deleteCapture = () => {
+        const resultElement = document.getElementById("result")
+
+        if (resultElement.hasChildNodes()){
+            resultElement.removeChild(document.getElementById('canvas'))
+        } 
+    }
+    return { captureMemoItems, deleteCapture }
 }
