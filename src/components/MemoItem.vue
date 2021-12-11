@@ -1,4 +1,8 @@
 <template>
+    <div><button @click="filter = (item) => item.value === 1">数量残り1</button></div>
+    <div><button @click="filter = (item) => item.period === 1">期限残り1日</button></div>
+    <div><button @click="filter = null">フィルターなし</button></div>
+    
     <div class="flex justify-end items-center m-2 bg-white p-2"
         v-for="(item, index) in displayItems"
         v-bind:key="index">
@@ -55,13 +59,15 @@ export default {
         return {
             //propで渡された親で定義された値は変更できない
             //のでローカルにコピーを作成する
-            memoItems: []
+            memoItems: [],
+            filter: (item) => item.period === 1
         }
     },
     computed:{
         displayItems(){ // 残り日数1のものを抽出
+            if (!this.filter) return this.memoItems
             return this.memoItems
-                .filter(item => item.period === 1)
+                .filter(this.filter)
         }
     },
     methods:{
@@ -91,12 +97,10 @@ export default {
             // オブジェクトの配列についてはObject.assign()で
             // ディープコピーできなかったので以下の方法で行う。
             // 参考: https://crieit.net/posts/JavaScript
-            this.memoItems = this.category.items 
-                .map((obj) => Object.assign({},obj));
+            this.memoItems = Object.assign([], this.category.items)
         },
         reset(){
-            this.memoItems = this.category.items
-                .map((obj) => Object.assign({},obj));
+            this.memoItems = Object.assign([], this.category.items)
         }
     }
 }
