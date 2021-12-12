@@ -1,6 +1,7 @@
 <script setup>
 import { defineProps, defineEmits, toRefs, watch } from 'vue'
 import useMemoItems from '../disposable/useMemoItems.js'
+import ItemAdd_2 from './ItemAdd_2.vue'
 
 const props = defineProps({
     displayCategories: Object,
@@ -14,6 +15,19 @@ const {
     memoItems, filter, displayItems
 } = useMemoItems()
 defineEmits(['openModal','increment','decrement'])
+
+function addMemoItem(item_name, ...args){
+    console.log(args)
+    memoItems.value.push({
+        "id":"",
+        "category_id":"",
+        "category_name":"",
+        "name":item_name,
+        "value":1,
+        "period":1,
+        "unit_name":""
+    })
+}
 
 function deleteMemoItem(deleteItem){
         memoItems.value.forEach((item, i)=>{
@@ -108,15 +122,17 @@ watch(reset, () => {
                     −
                 </button>
             </div>
-        <div class="mr-0">
-            <button 
-                        class="px-4 py-2 bg-red-500 hover:bg-red-700 
-                    text-white rounded-lg font-bold text-xs ml-5"
-                        @click="deleteMemoItem(item)">
-                    削除
-                </button><!--削除-->
+            <div class="mr-0">
+                <button 
+                            class="px-4 py-2 bg-red-500 hover:bg-red-700 
+                        text-white rounded-lg font-bold text-xs ml-5"
+                            @click="deleteMemoItem(item)">
+                        削除
+                    </button><!--削除-->
+            </div>
         </div>
-    </div>
+        <ItemAdd_2
+            @item-added="addMemoItem"/>
     </div>
     
     
