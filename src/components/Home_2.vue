@@ -1,7 +1,7 @@
 <script setup>
 import useDatabase from '../disposable/useDatabase.js'
 import ItemAdd_2 from './ItemAdd_2.vue'
-import Item from './Item.vue'
+import CategoryItems from './CategoryItems.vue'
 import Modal from './Modal.vue'
 import ShoppingList from './ShoppingList.vue'
 import Header from './Header.vue'
@@ -12,9 +12,7 @@ const {
   computedCategories,
   addItem,
   updateItem,
-  deleteItem,
-  incrementValue,
-  decrementValue
+  deleteItem
 } = useDatabase()
 
 const {
@@ -64,10 +62,8 @@ const closeList = () => {
                         <!--カテゴリ名-->
                         {{category.name}}
                     </div>
-                    <Item
+                    <CategoryItems
                       @open-modal="openModal"
-                      @increment-value="incrementValue"
-                      @decrement-value="decrementValue"
                       :category="category"
                       />
                 <ItemAdd_2 
