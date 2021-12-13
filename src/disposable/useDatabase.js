@@ -125,7 +125,17 @@ export default function useDatabase(){
         await deleteDoc(doc(db, `users/${uid}/items/${itemId}`))
         setMessage("アイテムを削除しました","info",3000)
     }
-    
+
+    const deleteItems = async (itemIds) => {
+        const uid = user.value ? user.value.uid : ""
+        const batch = writeBatch(db)
+        itemIds.forEach(itemId => {
+            batch.delete(doc(db, `users/${uid}/items/${itemId}`))
+        })
+        await batch.commit()
+        setMessage("複数アイテムを削除しました","info",3000)
+    }
+
     const deleteAllItems = async (category) => {
         const uid = user.value ? user.value.uid : ""
         const batch = writeBatch(db)
@@ -134,7 +144,7 @@ export default function useDatabase(){
             batch.delete(doc(db, `users/${uid}/items/${itemId}`))
         })
         await batch.commit()
-        setMessage("アイテムを削除しました","info",3000)
+        setMessage("全アイテムを削除しました","info",3000)
     }
 
     const incrementValue = async (itemId) => {
@@ -158,6 +168,7 @@ export default function useDatabase(){
         deleteItem,
         incrementValue,
         decrementValue,
+        deleteItems,
         deleteAllItems
     }
 }

@@ -1,6 +1,32 @@
+<script setup>
+import useSelectDelete from '../disposable/useSelectDelete'
+
+const {
+    showCheckbox,
+    selectedItems,
+    deleteSelectedItems,
+    resetSelect,
+    canselSelect
+} = useSelectDelete()
+</script>
 <template>
     <div class="flex justify-end ml-10">
             <!--ヘッダー-->
+            <div class="flex justify-between mr-auto">
+
+                <div v-show="!showCheckbox">
+                    <button @click="showCheckbox=true">アイテムを選択</button>
+                </div>
+                <div v-show="showCheckbox && selectedItems.length">
+                    <button @click="deleteSelectedItems">選択されたアイテムを削除</button>
+                </div>
+                <div v-show="showCheckbox">
+                    <button @click="resetSelect">選択をリセット</button>
+                </div>
+                <div v-show="showCheckbox">
+                    <button @click="canselSelect">選択をキャンセル</button>
+                </div>
+            </div>
             <div 
                 class="flex items-end text-3xl mr-10"
                 @click="$emit('openList','買い物メモ')">
@@ -22,11 +48,6 @@
         </div>
 </template>
 
-<script>
-export default {
-    name: 'Header'
-}
-</script>
 
 <style scoped>
 

@@ -1,7 +1,8 @@
 <script setup>
-import { defineProps, defineEmits, toRefs } from 'vue'
+import { defineProps, defineEmits, toRefs, ref } from 'vue'
 import useItemFilters from '../disposable/useItemFilters.js'
 import useDatabase from '../disposable/useDatabase.js'
+import useSelectDelete from '../disposable/useSelectDelete'
 
 const props = defineProps({
     category: Object,
@@ -17,6 +18,10 @@ const {
     filteredDisplayItems,
     setFilter
 } = useItemFilters(category)
+const {
+    selectedItems,
+    showCheckbox
+} = useSelectDelete()
 </script>
 <template>
     <div class="flex justify-evenly my-2">
@@ -28,6 +33,14 @@ const {
         v-for="(item, index) in filteredDisplayItems"
         v-bind:key="index"
         @click="$emit('openModal', item)">
+        <!-- 選択削除ボタン -->
+        <div v-show="showCheckbox" 
+            @click.stop="">
+            <input 
+                type="checkbox" 
+                v-model="selectedItems.indexOf(item.id) !== -1"
+                @input="selectedItems.push(item.id)">
+        </div>
         <!--アイテム-->
         <div class="bg-red-500 -mt-2 h-7 w-2 mr-3"
             v-if="item.period == 1">
