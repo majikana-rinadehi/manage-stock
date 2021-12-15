@@ -1,3 +1,34 @@
+<script setup>
+import { ref, defineProps,  watch, toRefs, nextTick } from 'vue'
+const props = defineProps(['item','show'])
+const {
+    item,
+    show
+} = toRefs(props)
+
+const form = ref({
+    id: '',
+    category_id: '',
+    category_name:'',
+    name: '',
+    value: '',
+    period: '',
+    unit_name: ''
+})
+const inputRef = ref(null)
+watch(show, (newValue) => {
+    if(newValue){
+        nextTick(() => inputRef.value.focus())
+        Object.assign(form.value, item.value)
+        return
+    }
+    inputRef.value.blur()
+    Object.keys(form.value).forEach(key => {
+        form.value[key] = ''
+    })
+})
+</script>
+
 <template>
     <!--②アイテム編集(モーダル)-->
     <div class="fixed  top-0 left-0 right-0 flex justify-center mt-48">
@@ -32,7 +63,9 @@
                     <!--カテゴリ-->
                     アイテム名
                 </label>
-                <input class="border rounded-lg px-4 py-2 text-xs"
+                <input
+                    ref="inputRef" 
+                    class="border rounded-lg px-4 py-2 text-xs"
                     v-model="form.name"><!--カテゴリ名-->
             </div>
             <div class="my-4 flex justify-end">
@@ -76,39 +109,3 @@
         </div>
     </div>
 </template>
-<script>
-export default {
-    name: 'Modal',
-    // emits: ['closeModal'], //何故か['close-modal']とするとモーダルが開かなくなる
-    props: ['item','show'],
-    methods: {
-        clickEvent(){
-            this.$emit('closeModal')
-        }
-    },
-    data(){
-        return {
-            form: {
-                id: '',
-                category_id: '',
-                category_name:'',
-                name: '',
-                value: '',
-                period: '',
-                unit_name: ''
-            }
-        }
-    },
-    watch:{
-        show(newValue){ // 親コンポーネントでshowModalが変化した時に呼び出される。
-            if(newValue){ //表示されたとき
-                Object.assign(this.form, this.item)
-                return
-            } 
-            Object.keys(this.form).forEach(key => {
-                this.form[key] = ''
-            })
-        }
-    }
-}
-</script>
