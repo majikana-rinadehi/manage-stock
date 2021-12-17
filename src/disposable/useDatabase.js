@@ -103,6 +103,15 @@ export default function useDatabase(){
         setMessage("アイテムを追加しました","info",3000)
       }
 
+      const addCategory = async(categoryName) => {
+        const uid = user.value ? user.value.uid : ""
+        const docRef = await addDoc(collection(db, `users/${uid}/categories`), {
+            "name": categoryName
+        })
+        console.log(docRef);
+        setMessage("カテゴリを追加しました","info",3000)
+      }
+
     const updateItem = async (form) => {
         const uid = user.value ? user.value.uid : ""
         const itemId = form.id
@@ -124,6 +133,12 @@ export default function useDatabase(){
         const uid = user.value ? user.value.uid : ""
         await deleteDoc(doc(db, `users/${uid}/items/${itemId}`))
         setMessage("アイテムを削除しました","info",3000)
+    }
+
+    const deleteCategory = async(categoryId) => {
+        const uid = user.value ? user.value.uid : ""
+        await deleteDoc(doc(db, `users/${uid}/categories/${categoryId}`))
+        setMessage("カテゴリを削除しました","info",3000)
     }
 
     const deleteItems = async (itemIds) => {
@@ -164,6 +179,8 @@ export default function useDatabase(){
         useListener,
         computedCategories,
         addItem,
+        addCategory,
+        deleteCategory,
         updateItem,
         deleteItem,
         incrementValue,

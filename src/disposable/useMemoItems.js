@@ -1,4 +1,4 @@
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 
 const memoItems = ref([])
 // memoItemsをuseMemoItems()スコープ内に入れると、
@@ -18,20 +18,22 @@ export default function useMemoItems() {
 
     let mailText = ref("")
 
-    const createMail = () => {
+    watch(displayItems, (newValue)=>{
+        console.log("displayItems changed")
+        console.log(displayItems.value)
+        console.log(newValue)
         mailText.value = `
 買い物ヨロシクゥ！
 ================
 `
-        if (displayItems.value.length){
-            displayItems.value.forEach(item => {
+        if (newValue.length){
+            newValue.forEach(item => {
                 mailText.value += `
 ・${item.name}...${item.value}${item.unit_name}
 `
             })
         }
-        console.log(mailText.value)
-    }
+    })
   
-    return { memoItems, filter, displayItems, mailText, createMail }
+    return { memoItems, filter, displayItems, mailText }
 }

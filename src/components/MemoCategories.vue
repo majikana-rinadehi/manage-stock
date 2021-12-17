@@ -51,6 +51,7 @@ watch(show, () => {
     // 参考: https://crieit.net/posts/JavaScript
     const _memoItems = []
     displayCategories.value.forEach(category => {
+        if (!category.items.length) return
         category.items.forEach(item => {
             _memoItems.push(item)
         })
@@ -63,8 +64,9 @@ watch(show, () => {
 watch(reset, () => {
     const _memoItems = []
     displayCategories.value.forEach(category => {
+        if (!category.items.length) return 
         category.items.forEach(item => {
-            _memoItems.push(item)
+            if(item) _memoItems.push(item)
         })
         _memoItems.push(category.items)
     })
@@ -74,9 +76,16 @@ watch(reset, () => {
 })
 </script>
 <template>
-    <div><button @click="filter = (item) => item.value === 1">数量残り1</button></div>
-    <div><button @click="filter = (item) => item.period === 1">期限残り1日</button></div>
-    <div><button @click="filter = null">フィルターなし</button></div>
+
+    <div class="flex flex-col bg-gray-100">
+        <div>絞り込み</div>
+        <div class="flex justify-evenly">
+            <div><button @click="filter = (item) => item.value === 1">数量残り1</button></div>
+            <div><button @click="filter = (item) => item.period === 1">期限残り1日</button></div>
+            <div><button @click="filter = null">フィルターなし</button></div>
+        </div>
+    </div>
+    
 
     <!-- id="capture-items-target"をここに移動 -->
     <div id="capture-items-target" 

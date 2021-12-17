@@ -74,7 +74,7 @@ watch(show, (newValue) => {
                     <!--数量-->
                     数量
                 </label>
-                <input class="w-14 border rounded-lg"
+                <input class="w-14 border rounded-lg text-center"
                     v-model.number="form.value"><!--数量-->
             </div>
             <div class="my-4 flex justify-end">
@@ -83,7 +83,7 @@ watch(show, (newValue) => {
                     <!--個数の単位-->
                     単位
                 </label>
-                <input class="w-14 border rounded-lg"
+                <input class="w-14 border rounded-lg text-center"
                     v-model.number="form.unit_name">
             </div>
             <div class="my-4 flex justify-end">
@@ -93,7 +93,7 @@ watch(show, (newValue) => {
                     残り日数
                 </label>
                 <input type="text" 
-                    class="w-14 border rounded-lg"
+                    class="w-14 border rounded-lg text-center"
                 
                     v-model.number="form.period"><!--賞味期限-->
             </div>
