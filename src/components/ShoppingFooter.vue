@@ -7,7 +7,6 @@ import { getFunctions, httpsCallable } from 'firebase/functions'
 defineEmits(['capture-memo-items', 'open-capture'])
 
 const {
-    createMail,
     mailText,
 } = useMemoItems()
 const {
@@ -39,7 +38,6 @@ const sendingMail = () =>{
 }
 
 function creatingMail(){
-    createMail()
     showMail.value = true
 }
 </script>

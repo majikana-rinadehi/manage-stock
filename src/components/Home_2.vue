@@ -1,6 +1,7 @@
 <script setup>
 import useDatabase from '../disposable/useDatabase.js'
 import ItemAdd_2 from './ItemAdd_2.vue'
+import CategoryAdd from './CategoryAdd.vue'
 import CategoryItems from './CategoryItems.vue'
 import Modal from './Modal.vue'
 import ShoppingList from './ShoppingList.vue'
@@ -11,6 +12,8 @@ const {
   useListener,
   computedCategories,
   addItem,
+  addCategory,
+  deleteCategory,
   updateItem,
   deleteItem
 } = useDatabase()
@@ -53,7 +56,7 @@ const closeList = () => {
             <!--①,②,③-->
             <div class="flex flex-wrap">
                 <!--①:カテゴリアイテム-->
-                <div class="bg-gray-200 m-2 p-2 text-sm mx-auto shadow-around" 
+                <div class="relative bg-gray-200 mx-2 my-6 p-2 text-sm mx-auto shadow-around" 
                     style="min-width: 420px;"
                   v-for="(category, index) in computedCategories"
                   v-bind:key="index">
@@ -62,15 +65,24 @@ const closeList = () => {
                         <!--カテゴリ名-->
                         {{category.name}}
                     </div>
+                    <div 
+                      class="absolute top-2 right-2"
+                      @click="deleteCategory(category.id)">削除</div>
                     <CategoryItems
                       @open-modal="openModal"
                       :category="category"
                       />
-                <ItemAdd_2 
-                    @item-added="addItem"
-                    :category_name="category.name"
-                    :category_id="category.id"/> <!--タスク追加コンポーネント-->
+                    <ItemAdd_2 
+                      @item-added="addItem"
+                      :category_name="category.name"
+                      :category_id="category.id"/> <!--タスク追加コンポーネント-->
                 </div>
+                <div class="bg-gray-200 mx-2 my-6 p-2 text-sm mx-auto shadow-around" 
+                    style="min-width: 420px;">
+                  <CategoryAdd
+                    @category-added="addCategory"
+                    />
+                  </div>
             </div>
         </div> 
         <Modal 

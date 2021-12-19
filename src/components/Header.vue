@@ -15,16 +15,28 @@ const {
             <div class="flex justify-between mr-auto">
 
                 <div v-show="!showCheckbox">
-                    <button @click="showCheckbox=true">アイテムを選択</button>
+                    <button
+                        class="px-4 py-2 bg-green-500 hover:bg-green-700 
+                                text-white rounded-lg mr-2 font-bold text-xs" 
+                        @click="showCheckbox=true">アイテムを選択</button>
                 </div>
                 <div v-show="showCheckbox && selectedItems.length">
-                    <button @click="deleteSelectedItems">選択されたアイテムを削除</button>
+                    <button
+                        class="px-4 py-2 bg-red-500 hover:bg-red-700 
+                                text-white rounded-lg mr-2 font-bold text-xs" 
+                        @click="deleteSelectedItems">選択されたアイテムを削除</button>
                 </div>
                 <div v-show="showCheckbox">
-                    <button @click="resetSelect">選択をリセット</button>
+                    <button
+                        class="px-4 py-2 bg-green-500 hover:bg-green-700 
+                                text-white rounded-lg mr-2 font-bold text-xs" 
+                        @click="resetSelect">選択をリセット</button>
                 </div>
                 <div v-show="showCheckbox">
-                    <button @click="canselSelect">選択をキャンセル</button>
+                    <button
+                        class="px-4 py-2 bg-yellow-500 hover:bg-yellow-700 
+                                text-white rounded-lg mr-2 font-bold text-xs" 
+                        @click="canselSelect">選択するのをやめる</button>
                 </div>
             </div>
             <div 
