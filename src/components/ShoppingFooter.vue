@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import { defineEmits, ref } from 'vue'
 import useMemoItems from '../disposable/useMemoItems.js'
 import useMessage from '../disposable/useMessage.js'
@@ -18,12 +18,14 @@ const sendTo = ref("")
 const mailSubject = ref("")
 const functions = getFunctions(firebaseApp)
 const sendMail = httpsCallable(functions, 'sendMail')
+const sendLine = httpsCallable(functions, 'sendLine')
 const sendingMail = () =>{
-    const data = {}
-    data["from"] = "rudyrudy2103@gmail.com",
-    data["to"] = sendTo.value,
-    data["subject"] = mailSubject.value,
-    data["text"] = mailText.value
+    const data = {
+        from: "rudyrudy2103@gmail.com",
+        to: sendTo.value, 
+        subject: mailSubject.value, 
+        text: 1
+    }
 
     sendMail(data)
         .then(() => {
@@ -39,6 +41,22 @@ const sendingMail = () =>{
 
 function creatingMail(){
     showMail.value = true
+}
+
+function sendingLine () {
+    const data = {
+        text: mailText.value
+    }
+    sendLine(data)
+        .then(() => {
+            showMail.value = false
+            setMessage("Lineを送信しました", "info", 3000)
+        })
+        .catch(err => {
+            showMail.value = false
+            setMessage("Lineの送信に失敗しました", "error", 3000)
+            console.log(err)
+        })
 }
 </script>
 
@@ -74,6 +92,9 @@ function creatingMail(){
                         <input type="mail" v-model="sendTo" id="send-to">
                         <div>
                             <button @click="sendingMail">メールを送信</button>
+                        </div>
+                        <div>
+                            <button @click="sendingLine">Lineを送信</button>
                         </div>
                     </div>
                 </div> 
