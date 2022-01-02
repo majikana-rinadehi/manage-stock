@@ -1,21 +1,26 @@
-<script setup>
+<script setup lang="ts">
 import { ref, defineProps,  watch, toRefs, nextTick } from 'vue'
+import type { EditForm } from '../disposable/types'
+
 const props = defineProps(['item','show'])
 const {
     item,
     show
 } = toRefs(props)
 
-const form = ref({
+const form = ref<EditForm>({
     id: '',
     category_id: '',
     category_name:'',
     name: '',
-    value: '',
-    period: '',
+    value: 0,
+    period: 0,
     unit_name: ''
 })
-const inputRef = ref(null)
+
+
+const inputRef = ref()
+
 watch(show, (newValue) => {
     if(newValue){
         nextTick(() => inputRef.value.focus())
@@ -24,7 +29,12 @@ watch(show, (newValue) => {
     }
     inputRef.value.blur()
     Object.keys(form.value).forEach(key => {
-        form.value[key] = ''
+        if(typeof form.value[key] === 'string'){
+            form.value[key] = ''
+        }
+        if(typeof form.value[key] === 'number'){
+            form.value[key] = 0
+        }
     })
 })
 </script>
