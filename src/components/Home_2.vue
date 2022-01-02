@@ -15,7 +15,8 @@ const {
   addCategory,
   deleteCategory,
   updateItem,
-  deleteItem
+  deleteItem,
+  addField
 } = useDatabase()
 
 const {
@@ -53,6 +54,14 @@ const closeList = () => {
     <Header
       @open-list="openList"/>
      <div class="my-5">
+            <!--[TODO]for development start-->
+            <div>
+                <button
+                    class="px-4 py-2 bg-cyan-500 hover:bg-cyan-700 
+                            text-white rounded-lg mr-2 font-bold text-xs" 
+                    @click="addField">フィールド追加!!!!倍！</button>
+            </div>
+            <!--[TODO]for development end-->
             <!--①,②,③-->
             <div class="flex flex-wrap">
                 <!--①:カテゴリアイテム-->

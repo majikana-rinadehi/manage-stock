@@ -4,6 +4,7 @@ import useMemoItems from '../disposable/useMemoItems.js'
 import useMessage from '../disposable/useMessage.js'
 import { firebaseApp } from '../settings/firebase.js'
 import { getFunctions, httpsCallable } from 'firebase/functions'
+import type { MailData } from '../disposable/types.js'
 defineEmits(['capture-memo-items', 'open-capture'])
 
 const {
@@ -12,6 +13,15 @@ const {
 const {
     setMessage
 } = useMessage()
+
+let aaa: MailData;
+aaa = {
+    from: "aaa",
+    to: "aaa",
+    subject: "aaa",
+    text: "aaa"
+}
+console.log(aaa)
 
 const showMail = ref(false)
 const sendTo = ref("")

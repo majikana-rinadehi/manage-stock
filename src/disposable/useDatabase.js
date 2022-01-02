@@ -8,7 +8,8 @@ import {
     updateDoc,
     deleteDoc,
     increment,
-    writeBatch
+    writeBatch,
+    orderBy
 } from 'firebase/firestore'
 import { db } from '../settings/firebase.js'
 import { useAuth } from './useAuth'
@@ -29,11 +30,13 @@ export default function useDatabase(){
 
     const useListener = () => {
          
-        // listener for items
-        // called in Home_2.vue by onMounted()
+        /**
+         * listener for items, categories called in Home_2.vue by onMounted()
+         * ※order by upd_date asc
+         */
         function setListener(){
             const uid = user.value ? user.value.uid : ""
-            const itemsQuery = query(collection(db, `users/${uid}/items`))
+            const itemsQuery = query(collection(db, `users/${uid}/items`), orderBy("upd_date", "asc"))
             const unsubItems = onSnapshot(itemsQuery, querySnapshot => {
                 const _items = []
                 querySnapshot.forEach(doc => {
@@ -52,7 +55,7 @@ export default function useDatabase(){
             })
 
             // listener for categories
-            const categoriesQuery = query(collection(db, `users/${uid}/categories`))
+            const categoriesQuery = query(collection(db, `users/${uid}/categories`), orderBy("upd_date", "asc"))
             const unsubCategories = onSnapshot(categoriesQuery, querySnapshot => {
                 const _categories = []
                 querySnapshot.forEach(doc => {
@@ -77,7 +80,7 @@ export default function useDatabase(){
           console.log(items.value);
           dispItems.value = items.value.filter(item => {
               console.log(item.category_id, category.id);
-            return item.category_id.toString() === category.id // return を忘れないこと!
+            return item.category_id === category.id // return を忘れないこと!
           })
           console.log(dispItems.value);
           displayCategories.push({  
@@ -91,22 +94,32 @@ export default function useDatabase(){
 
       const addItem = async (itemName, categoryId, categoryName) => {
         const uid = user.value ? user.value.uid : ""
+        const date = new Date()
         const docRef = await addDoc(collection(db, `users/${uid}/items`), {
             "category_id": categoryId,
             "category_name": categoryName,
             "name": itemName,
             "value": 1,
             "period": 1,
-            "unit_name": ""
+            "unit_name": "",
+            "add_date": date.toLocaleTimeString(),
+            "upd_date": date.toLocaleTimeString()
         })
         console.log(docRef);
         setMessage("アイテムを追加しました","info",3000)
       }
 
+      /**
+       * add category
+       * @param {string} categoryName 
+       */
       const addCategory = async(categoryName) => {
         const uid = user.value ? user.value.uid : ""
+        const date = new Date()
         const docRef = await addDoc(collection(db, `users/${uid}/categories`), {
-            "name": categoryName
+            "name": categoryName,
+            "add_date": date.toLocaleTimeString(),
+            "upd_date": date.toLocaleTimeString(),
         })
         console.log(docRef);
         setMessage("カテゴリを追加しました","info",3000)
@@ -115,6 +128,7 @@ export default function useDatabase(){
     const updateItem = async (form) => {
         const uid = user.value ? user.value.uid : ""
         const itemId = form.id
+        const date = new Date()
         console.log("form: ",form);
         console.log("itemId: ",itemId);
         const itemRef = doc(db, `users/${uid}/items/${itemId}`)
@@ -124,7 +138,8 @@ export default function useDatabase(){
             "name": form.name,
             "value": form.value,
             "period": form.period,
-            "unit_name": form.unit_name
+            "unit_name": form.unit_name,
+            "upd_date": date.toLocaleTimeString()
         })
         setMessage("アイテムを更新しました","info",3000)
     }
@@ -175,6 +190,41 @@ export default function useDatabase(){
             value: increment(-1)
         })
     }
+
+    /**
+     * !!!for development!!!
+     * add these field
+     * - users/${uid}/items/${itemId}/add_date
+     * - users/${uid}/items/${itemId}/upd_date
+     * - users/${uid}/categories/${categoryId}/add_date
+     * - users/${uid}/categories/${categoryId}/upd_date
+     */
+    const addField = async () => {
+        const uid = user.value ? user.value.uid : ""
+        const batch = writeBatch(db)
+        const date = new Date()
+        console.log("items.value")
+        console.log(items.value)
+        items.value.forEach(item => {
+            const itemId = item.id
+            console.log(itemId)
+            batch.set(doc(db, `users/${uid}/items/${itemId}`), {
+                add_date: date.toISOString(), // e.g. 2022-01-02T11:14:15.057Z
+                upd_date: date.toISOString()
+
+            }, { merge: true })
+        })
+        categories.value.forEach(category => {
+            const categoryId = category.id
+            batch.set(doc(db, `users/${uid}/categories/${categoryId}`), {
+                add_date: date.toISOString(),
+                upd_date: date.toISOString()
+            }, { merge: true })
+        })
+        await batch.commit()
+        setMessage("バッチ処理完了---っ!!!♡","info",3000)
+    } 
+
     return {
         useListener,
         computedCategories,
@@ -186,7 +236,8 @@ export default function useDatabase(){
         incrementValue,
         decrementValue,
         deleteItems,
-        deleteAllItems
+        deleteAllItems,
+        addField
     }
 }
 /* eslint-enable no-unused-vars */
