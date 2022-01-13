@@ -45,5 +45,13 @@ exports.helloWorld = functions.https.onRequest(async (request, response) => {
     response.json(result)
 })
 
+exports.sendLine = functions.https.onCall(async (data, context) => {
+    const client = new line.Client({
+        channelAccessToken: configs.manage_stock.access_token,
+        channelSecret: configs.manage_stock.channel_secret
+    })
+    await client.broadcast({ type: "text", text: data.text })
+})
+
 const admin = require('firebase-admin')
 admin.initializeApp()

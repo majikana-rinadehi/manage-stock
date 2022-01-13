@@ -36,6 +36,21 @@ const sendingMail = () =>{
             console.log(err);
         })
 }
+const sendLine = httpsCallable(functions, 'sendLine')
+const sendingLine = () => {
+    const data = {}
+    data['text'] = mailText.value
+    sendLine(data)
+        .then(() => {
+            showMail.value = false
+            setMessage("LINEを送信しました","info",3000)
+        })
+        .catch(err => {
+            showMail.value = false
+            setMessage("LINEの送信に失敗しました","error",3000)
+            console.log(err);
+        })
+}
 
 function creatingMail(){
     showMail.value = true
@@ -54,7 +69,7 @@ function creatingMail(){
             </svg>
             <div @click="creatingMail()">
                 <!--メールで共有-->
-                メールで共有
+                メール/Lineで共有
             </div>
             <div class="fixed  top-0 left-0 right-0 flex justify-center mt-48"
                 v-show="showMail">
@@ -74,6 +89,9 @@ function creatingMail(){
                         <input type="mail" v-model="sendTo" id="send-to">
                         <div>
                             <button @click="sendingMail">メールを送信</button>
+                        </div>
+                        <div>
+                            <button @click="sendingLine">LINEを送信</button>
                         </div>
                     </div>
                 </div> 
