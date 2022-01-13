@@ -177,6 +177,10 @@ export default function useDatabase(){
         setMessage("全アイテムを削除しました","info",3000)
     }
 
+    /**
+     * increment 'value' of item
+     * @param {string} itemId 
+     */
     const incrementValue = async (itemId) => {
         const uid = user.value ? user.value.uid : ""
         await updateDoc(doc(db, `users/${uid}/items/${itemId}`), {
@@ -184,6 +188,10 @@ export default function useDatabase(){
         })
     }
 
+    /**
+     * decrement 'value' of item
+     * @param {string} itemId 
+     */
     const decrementValue = async (itemId) => {
         const uid = user.value ? user.value.uid : ""
         await updateDoc(doc(db, `users/${uid}/items/${itemId}`), {
