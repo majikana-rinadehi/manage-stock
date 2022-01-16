@@ -1,16 +1,16 @@
-import { getAuth, signInWithEmailAndPassword, signOut } from 'firebase/auth'
+import { getAuth, signInWithEmailAndPassword, signOut, User } from 'firebase/auth'
 import { firebaseApp } from '../settings/firebase.js'
 import { ref } from 'vue'
 import useMessage from './useMessage'
 
 const { setMessage } = useMessage()
-const user = ref(null)
+const user = ref<User | null>()
 const isAuthenticated = ref(false)
 
 const useAuth = () => {
     const auth = getAuth(firebaseApp)
 
-    const login = async (auth, email, password) => {
+    const login = async (auth: any, email: string, password: string) => {
         const userCredential = await signInWithEmailAndPassword(auth, email, password)
         console.log(userCredential);
         user.value = userCredential.user
@@ -18,9 +18,9 @@ const useAuth = () => {
         setMessage("ログインしました","info",3000)
     }
 
-    const logout = async (auth) => {
+    const logout = async (auth: any) => {
         await signOut(auth)
-        user.value = ""
+        user.value = null
         isAuthenticated.value = false
         setMessage("ログアウトしました","info",3000)
     }

@@ -2,7 +2,7 @@
 import { defineProps, defineEmits, toRefs } from 'vue'
 import Item from './Item.vue'
 import useItemFilters from '../disposable/useItemFilters.js'
-import useDatabase from '../disposable/useDatabase.js'
+import useDatabase from '../disposable/useDatabase.ts'
 
 const props = defineProps({
     category: Object,

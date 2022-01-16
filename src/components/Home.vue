@@ -1,5 +1,5 @@
 <script setup>
-import useDatabase from '../disposable/useDatabase.js'
+import useDatabase from '../disposable/useDatabase.ts'
 import ItemAdd_2 from './ItemAdd_2.vue'
 import CategoryAdd from './CategoryAdd.vue'
 import CategoryItems from './CategoryItems.vue'

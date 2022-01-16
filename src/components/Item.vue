@@ -1,19 +1,10 @@
 <script setup lang="ts">
 import { defineProps, defineEmits, toRefs, computed } from 'vue'
-import useDatabase from '../disposable/useDatabase.js'
+import useDatabase from '../disposable/useDatabase'
 import useSelectDelete from '../disposable/useSelectDelete'
 import type { Item } from '../disposable/types'
 
-const props = defineProps<{ item: { type: Item, required: true} }>() // eslint-disable-line vue/valid-define-props
-
-type Test = {
-    aaa: string;
-}
-
-const test: Test = {
-    aaa: "aaa"
-}
-console.log(test)
+const props = defineProps<{ item: Item }>() // eslint-disable-line vue/valid-define-props
 
 defineEmits(['incrementValue','decrementValue'])
 const {

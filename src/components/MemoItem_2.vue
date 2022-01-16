@@ -1,6 +1,6 @@
-<script setup>
+<script setup lang="ts">
 import { defineProps, defineEmits, ref, toRefs, watch } from 'vue'
-import useMemoFilters from '../disposable/useMemoFilters.js'
+import useMemoFilters from '../disposable/useMemoFilters'
 
 const props = defineProps({
     categories: Object,

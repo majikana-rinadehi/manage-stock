@@ -15,16 +15,44 @@ export type MailData = {
     text: string;
 }
 
+
 /**
- * modal form object for editing items
+ * item 
  */
-export interface EditForm {
-    [key: string] : string | number;
+export interface Item {
+    [index: string] : string | number;
+    
     id: string;
     category_id: string;
     category_name:string;
     name: string;
     value: number;
     period: number;
+    /**単位 */
     unit_name: string;
+}
+
+/**
+ * modal form object for editing items
+ */
+export interface EditForm extends Item{}
+
+/**
+ * memoItems
+ */
+export interface MemoItem extends Item {}
+
+/**
+ * category
+ */
+export interface Category{
+    id: string;
+    name: string;
+}
+
+/**
+ * displayCategory
+ */
+export interface DisplayCategory extends Category {
+    items: Item[];
 }

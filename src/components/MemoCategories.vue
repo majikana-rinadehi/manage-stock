@@ -1,6 +1,6 @@
 <script setup>
 import { defineProps, defineEmits, toRefs, watch } from 'vue'
-import useMemoItems from '../disposable/useMemoItems.js'
+import useMemoItems from '../disposable/useMemoItems.ts'
 import ItemAdd_2 from './ItemAdd_2.vue'
 
 const props = defineProps({
