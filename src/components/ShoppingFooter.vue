@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import { defineEmits, ref } from 'vue'
+import { Ref } from '@vue/reactivity'
 import useMemoItems from '../disposable/useMemoItems.js'
 import useMessage from '../disposable/useMessage.js'
+import { MailData } from '../disposable/types'
 import { firebaseApp } from '../settings/firebase.js'
 import { getFunctions, httpsCallable } from 'firebase/functions'
 defineEmits(['capture-memo-items', 'open-capture'])
@@ -13,18 +15,20 @@ const {
     setMessage
 } = useMessage()
 
-const showMail = ref(false)
-const sendTo = ref("")
-const mailSubject = ref("")
+const showMail: Ref<boolean> = ref(false)
+const sendTo: Ref<string> = ref("")
+const mailSubject: Ref<string> = ref("")
+
 const functions = getFunctions(firebaseApp)
 const sendMail = httpsCallable(functions, 'sendMail')
 const sendLine = httpsCallable(functions, 'sendLine')
-const sendingMail = () =>{
-    const data = {
+
+const sendingMail: () => void = () =>{
+    const data: MailData = {
         from: "rudyrudy2103@gmail.com",
         to: sendTo.value, 
         subject: mailSubject.value, 
-        text: 1
+        text: mailText.value
     }
 
     sendMail(data)
@@ -38,28 +42,12 @@ const sendingMail = () =>{
             console.log(err);
         })
 }
-const sendLine = httpsCallable(functions, 'sendLine')
-const sendingLine = () => {
-    const data = {}
-    data['text'] = mailText.value
-    sendLine(data)
-        .then(() => {
-            showMail.value = false
-            setMessage("LINEを送信しました","info",3000)
-        })
-        .catch(err => {
-            showMail.value = false
-            setMessage("LINEの送信に失敗しました","error",3000)
-            console.log(err);
-        })
-}
-
-function creatingMail(){
+function creatingMail(): void{
     showMail.value = true
 }
 
 function sendingLine () {
-    const data = {
+    const data: { text: string } = {
         text: mailText.value
     }
     sendLine(data)
@@ -125,4 +113,4 @@ function sendingLine () {
             </div>
         </div>
     </div>
-</template>>
+</template>
