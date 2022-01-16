@@ -1,7 +1,7 @@
 import { getAuth, signInWithEmailAndPassword, signOut } from 'firebase/auth'
 import { firebaseApp } from '../settings/firebase.js'
 import { ref } from 'vue'
-import useMessage from './useMessage.js'
+import useMessage from './useMessage'
 
 const { setMessage } = useMessage()
 const user = ref(null)

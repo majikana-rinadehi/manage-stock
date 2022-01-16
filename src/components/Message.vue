@@ -1,5 +1,5 @@
 <script setup>
-import useMessage from '../disposable/useMessage.js'
+import useMessage from '../disposable/useMessage'
 
 const { messageRef } = useMessage()
 const isActive = messageRef;

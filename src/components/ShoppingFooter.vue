@@ -2,7 +2,7 @@
 import { defineEmits, ref } from 'vue'
 import { Ref } from '@vue/reactivity'
 import useMemoItems from '../disposable/useMemoItems.js'
-import useMessage from '../disposable/useMessage.js'
+import useMessage from '../disposable/useMessage'
 import { MailData } from '../disposable/types'
 import { firebaseApp } from '../settings/firebase.js'
 import { getFunctions, httpsCallable } from 'firebase/functions'

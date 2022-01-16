@@ -13,7 +13,7 @@ import {
 import { db } from '../settings/firebase.js'
 import { useAuth } from './useAuth'
 import { ref, computed } from 'vue'
-import  useMessage  from './useMessage.js'
+import  useMessage  from './useMessage'
 
 const {
     user
@@ -30,7 +30,7 @@ export default function useDatabase(){
     const useListener = () => {
          
         // listener for items
-        // called in Home_2.vue by onMounted()
+        // called in Home.vue by onMounted()
         function setListener(){
             const uid = user.value ? user.value.uid : ""
             const itemsQuery = query(collection(db, `users/${uid}/items`))
@@ -69,7 +69,7 @@ export default function useDatabase(){
     }
 
     // nested items in each categories
-    // to display in Home_2.vue
+    // to display in Home.vue
     const computedCategories = computed(() => {
         let displayCategories = []
         categories.value.map(category => {

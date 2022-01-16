@@ -1,12 +1,12 @@
 import { ref } from 'vue'
 
-const messageRef = ref("")
-const timeoutId = ref(null)
+const messageRef = ref({})
+const timeoutId = ref()
 // ↑これをuseMessageスコープの中に入れると
 // messageRef.value = message が反映されない
 
 // firebase認証エラーコードに対応するエラーメッセージ
-const firebaseErrorMap = {
+const firebaseErrorMap: { [index: string]: string } = {
     "auth/invalid-email": "メールアドレスの形式が不正です",
     "auth/user-disabled": "無効なユーザーです",
     "auth/user-not-found": "ユーザーが見つかりません",
@@ -15,7 +15,7 @@ const firebaseErrorMap = {
 
 export default function useMessage() {
     
-    const setMessage = (message, kind, displaySec) => {
+    const setMessage = (message: string, kind: string, displaySec?: number) => {
         const newMessage = {
             message,
             kind
@@ -34,10 +34,10 @@ export default function useMessage() {
 
     // firebaseの認証エラーコード、またはその他キャッチされなかった
     // エラーに対応するエラーメッセージをセット
-    function errorHandler (err){
+    function errorHandler (err: any){
         const errorCode = err.code;
 
-        const errorMessage = firebaseErrorMap[errorCode] 
+        const errorMessage: string = firebaseErrorMap[errorCode] 
                             ? firebaseErrorMap[errorCode] 
                             : "エラーが発生しました"
         setMessage(errorMessage, "error")
