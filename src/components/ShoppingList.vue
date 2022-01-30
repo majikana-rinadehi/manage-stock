@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import MemoCategories from './MemoCategories.vue'
 import ShoppingFooter from './ShoppingFooter.vue'
-import { MailData } from '../disposable/types'
-import useCapture from '../disposable/useCapture.js'
+import { DisplayCategory } from '../disposable/types'
+import useCapture from '../disposable/useCapture'
 import { defineProps, ref, toRefs } from 'vue'
 
 const {
@@ -11,8 +11,8 @@ const {
 } = useCapture()
 
 interface Props {
-    show?: boolean;
-    displayCategories: MailData;
+    show: boolean;
+    displayCategories: DisplayCategory[];
     listTitle?: string;
 }
 

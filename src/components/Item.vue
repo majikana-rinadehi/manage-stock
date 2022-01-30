@@ -4,7 +4,9 @@ import useDatabase from '../disposable/useDatabase'
 import useSelectDelete from '../disposable/useSelectDelete'
 import type { Item } from '../disposable/types'
 
-const props = defineProps<{ item: Item }>() // eslint-disable-line vue/valid-define-props
+const props = defineProps<{ // eslint-disable-line vue/valid-define-props
+    item: Item 
+}>() 
 
 defineEmits(['incrementValue','decrementValue'])
 const {

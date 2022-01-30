@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { defineEmits, ref } from 'vue'
 import { Ref } from '@vue/reactivity'
-import useMemoItems from '../disposable/useMemoItems.ts'
+import useMemoItems from '../disposable/useMemoItems'
 import useMessage from '../disposable/useMessage'
 import { MailData } from '../disposable/types'
 import { firebaseApp } from '../settings/firebase.js'

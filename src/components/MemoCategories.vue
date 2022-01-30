@@ -1,23 +1,26 @@
-<script setup>
+<script setup lang="ts">
 import { defineProps, defineEmits, toRefs, watch } from 'vue'
-import useMemoItems from '../disposable/useMemoItems.ts'
+import useMemoItems from '../disposable/useMemoItems'
 import ItemAdd_2 from './ItemAdd_2.vue'
+import { Item, DisplayCategory } from '../disposable/types'
 
-const props = defineProps({
-    displayCategories: Object,
-    show: Boolean,
-    reset:  Number
-})
+
+const props = defineProps<{ // eslint-disable-line vue/valid-define-props
+    displayCategories: DisplayCategory[], 
+    show: boolean, 
+    reset:  number 
+}>() 
+
 const {
     displayCategories, show, reset
 } = toRefs(props)
+
 const { 
     memoItems, filter, displayItems
 } = useMemoItems()
 defineEmits(['openModal','increment','decrement'])
 
-function addMemoItem(item_name, ...args){
-    console.log(args)
+function addMemoItem(item_name: string){
     memoItems.value.push({
         "id":"",
         "category_id":"",
@@ -29,7 +32,7 @@ function addMemoItem(item_name, ...args){
     })
 }
 
-function deleteMemoItem(deleteItem){
+function deleteMemoItem(deleteItem: Item){
         memoItems.value.forEach((item, i)=>{
             if (item.id === deleteItem.id){
                 memoItems.value.splice(i, 1)
@@ -37,19 +40,19 @@ function deleteMemoItem(deleteItem){
             }
         })
     }
-function increment(incrementItem){
+function increment(incrementItem: Item){
     let item = memoItems.value.find(item => item.id === incrementItem.id)
     item.value += 1
 }
-function decrement(decrementItem){
-        let item = memoItems.value.find(item => item.id === decrementItem.id)
-        item.value -= 1
+function decrement(decrementItem: Item){
+    let item = memoItems.value.find(item => item.id === decrementItem.id)
+    item.value -= 1
 }
 watch(show, () => {
     // オブジェクトの配列についてはObject.assign()で
     // ディープコピーできなかったので以下の方法で行う。
     // 参考: https://crieit.net/posts/JavaScript
-    const _memoItems = []
+    const _memoItems: Item[] = []
     displayCategories.value.forEach(category => {
         if (!category.items.length) return
         category.items.forEach(item => {
@@ -62,7 +65,7 @@ watch(show, () => {
     // memoItems.value = Object.assign([], _memoItems)
 })
 watch(reset, () => {
-    const _memoItems = []
+    const _memoItems: Item[] = []
     displayCategories.value.forEach(category => {
         if (!category.items.length) return 
         category.items.forEach(item => {

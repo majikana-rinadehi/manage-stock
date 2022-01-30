@@ -1,6 +1,6 @@
 import { ref } from 'vue'
 
-const messageRef = ref({})
+const messageRef = ref<{ message: string, kind:string }>({ message: "", kind: "" })
 const timeoutId = ref()
 // ↑これをuseMessageスコープの中に入れると
 // messageRef.value = message が反映されない
@@ -27,7 +27,7 @@ export default function useMessage() {
             clearTimeout(timeoutId.value)
             console.log("wait");
             timeoutId.value = setTimeout(() => {
-                messageRef.value = ""
+                messageRef.value = { message: "", kind: "" }
             }, displaySec)
         }
     }

@@ -1,19 +1,19 @@
-<script setup>
+<script setup lang="ts">
 import { defineProps, defineEmits, toRefs } from 'vue'
 import Item from './Item.vue'
-import useItemFilters from '../disposable/useItemFilters.js'
-import useDatabase from '../disposable/useDatabase.ts'
+import useItemFilters from '../disposable/useItemFilters'
+import useDatabase from '../disposable/useDatabase'
+import { DisplayCategory } from '@/disposable/types'
 
-const props = defineProps({
-    category: Object,
-})
+const props = defineProps<{ // eslint-disable-line vue/valid-define-props
+    category: DisplayCategory 
+}>() 
 
 defineEmits(['openModal','incrementValue','decrementValue'])
 const {
     deleteAllItems
 } = useDatabase()
 const { category } = toRefs(props)
-console.log(category.value);
 const { 
     filteredDisplayItems,
     setFilter

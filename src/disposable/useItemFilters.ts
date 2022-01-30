@@ -1,19 +1,21 @@
 /* eslint-disable no-unused-vars */
 import { computed, ref, watch, onMounted } from 'vue'
+import { DisplayCategory, Item } from './types'
+import { Ref } from '@vue/reactivity'
 
-export default function useItemFilters(category){
+export default function useItemFilters(category: Ref<DisplayCategory>){
 
-    const filter = ref(null) // setFilterによってソート関数が割り当てられる
+    const filter: Ref<null | ((a: Item, b: Item) => number)> = ref(null) // setFilterによってソート関数が割り当てられる
     const computedItems = ref([]) 
     // ↑ CRUD 操作があったときに、category の変化を検知して、
     // category.value.items のディープコピーを代入する
 
-    const filteredItems = ref([]) 
+    const filteredItems = ref<Item[]>([]) 
     // ↑ 最終的に Item.vue の template に表示するもの
     // filterが変更されたときに、computedItems.value を
     // 新しい filter でソートしたもののディープコピーを代入する
 
-    const setFilter = (filterKind) => {
+    const setFilter = (filterKind: string) => {
         if (filterKind === 'sortByPeriod'){
             console.log("sortByPeriod");
             filter.value = (itemA, itemB) => {

@@ -1,5 +1,5 @@
-<script setup>
-import useDatabase from '../disposable/useDatabase.ts'
+<script setup lang="ts">
+import useDatabase from '../disposable/useDatabase'
 import ItemAdd_2 from './ItemAdd_2.vue'
 import CategoryAdd from './CategoryAdd.vue'
 import CategoryItems from './CategoryItems.vue'
@@ -7,6 +7,7 @@ import Modal from './Modal.vue'
 import ShoppingList from './ShoppingList.vue'
 import Header from './Header.vue'
 import { ref, onMounted } from 'vue'
+import { Item } from '@/disposable/types'
 
 const { 
   useListener,
@@ -25,11 +26,11 @@ const {
 onMounted(setListener)
 
 const showModal = ref(false)
-const modalItem = ref("")
+const modalItem = ref<Item>()
 const showList = ref(false)
 const listTitle = ref("")
 
-const openModal = (item) => {
+const openModal = (item: Item) => {
   showModal.value = true
   modalItem.value = item
 }
@@ -38,7 +39,7 @@ const closeModal = () => {
   showModal.value = false
 }
 
-const openList = (title) => {
+const openList = (title: string) => {
   listTitle.value = title
   showList.value = true
 }

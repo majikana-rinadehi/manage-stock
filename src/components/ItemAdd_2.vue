@@ -1,18 +1,17 @@
-<script setup>
+<script setup lang="ts">
 import { toRefs, ref, defineProps, defineEmits, nextTick } from 'vue'
 
 const emit = defineEmits(['ItemAdded'])
-const props = defineProps({
+const props = defineProps<{ // eslint-disable-line vue/valid-define-props
   'category_id': String,
   'category_name': String
-})
+}>()
 const { category_id, category_name } = toRefs(props)
 
 const show = ref(false)
 const item_name = ref("")
 const inputRef = ref(null)
 const buttonRef = ref(null)
-// const isComposing = ref(false)
 
 // 「+アイテムを追加」押下時
 const showInput = () => {
