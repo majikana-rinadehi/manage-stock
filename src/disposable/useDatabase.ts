@@ -12,8 +12,9 @@ import {
 } from 'firebase/firestore'
 import { db } from '../settings/firebase.js'
 import { useAuth } from './useAuth'
-import { ref, computed } from 'vue'
-import  useMessage  from './useMessage.js'
+import { ref, computed, ComputedRef } from 'vue'
+import  useMessage  from './useMessage'
+import { Item, Category, DisplayCategory, EditForm } from './types'
 
 const {
     user
@@ -24,18 +25,18 @@ const {
 } = useMessage()
 
 export default function useDatabase(){
-    const items = ref([])
-    const categories = ref([])
+    const items = ref<Item[]>([])
+    const categories = ref<Category[]>([])
 
     const useListener = () => {
          
         // listener for items
-        // called in Home_2.vue by onMounted()
+        // called in Home.vue by onMounted()
         function setListener(){
             const uid = user.value ? user.value.uid : ""
             const itemsQuery = query(collection(db, `users/${uid}/items`))
             const unsubItems = onSnapshot(itemsQuery, querySnapshot => {
-                const _items = []
+                const _items: Array<Item> = []
                 querySnapshot.forEach(doc => {
                     const data = doc.data()
                     _items.push({
@@ -54,7 +55,7 @@ export default function useDatabase(){
             // listener for categories
             const categoriesQuery = query(collection(db, `users/${uid}/categories`))
             const unsubCategories = onSnapshot(categoriesQuery, querySnapshot => {
-                const _categories = []
+                const _categories: Category[] = []
                 querySnapshot.forEach(doc => {
                     _categories.push({
                         id: doc.id,
@@ -69,11 +70,11 @@ export default function useDatabase(){
     }
 
     // nested items in each categories
-    // to display in Home_2.vue
-    const computedCategories = computed(() => {
-        let displayCategories = []
+    // to display in Home.vue
+    const computedCategories: ComputedRef<DisplayCategory[]>  = computed(() => {
+        let displayCategories: DisplayCategory[] = []
         categories.value.map(category => {
-          let dispItems = ref("")
+          let dispItems = ref<Item[]>()
           console.log(items.value);
           dispItems.value = items.value.filter(item => {
               console.log(item.category_id, category.id);
@@ -89,7 +90,7 @@ export default function useDatabase(){
         return displayCategories
       })
 
-      const addItem = async (itemName, categoryId, categoryName) => {
+      const addItem = async (itemName: string, categoryId: string, categoryName: string) => {
         const uid = user.value ? user.value.uid : ""
         const docRef = await addDoc(collection(db, `users/${uid}/items`), {
             "category_id": categoryId,
@@ -103,7 +104,7 @@ export default function useDatabase(){
         setMessage("アイテムを追加しました","info",3000)
       }
 
-      const addCategory = async(categoryName) => {
+      const addCategory = async(categoryName: string) => {
         const uid = user.value ? user.value.uid : ""
         const docRef = await addDoc(collection(db, `users/${uid}/categories`), {
             "name": categoryName
@@ -112,7 +113,7 @@ export default function useDatabase(){
         setMessage("カテゴリを追加しました","info",3000)
       }
 
-    const updateItem = async (form) => {
+    const updateItem = async (form: EditForm) => {
         const uid = user.value ? user.value.uid : ""
         const itemId = form.id
         console.log("form: ",form);
@@ -129,19 +130,19 @@ export default function useDatabase(){
         setMessage("アイテムを更新しました","info",3000)
     }
 
-    const deleteItem = async (itemId) => {
+    const deleteItem = async (itemId: string) => {
         const uid = user.value ? user.value.uid : ""
         await deleteDoc(doc(db, `users/${uid}/items/${itemId}`))
         setMessage("アイテムを削除しました","info",3000)
     }
 
-    const deleteCategory = async(categoryId) => {
+    const deleteCategory = async(categoryId: string) => {
         const uid = user.value ? user.value.uid : ""
         await deleteDoc(doc(db, `users/${uid}/categories/${categoryId}`))
         setMessage("カテゴリを削除しました","info",3000)
     }
 
-    const deleteItems = async (itemIds) => {
+    const deleteItems = async (itemIds: string[]) => {
         const uid = user.value ? user.value.uid : ""
         const batch = writeBatch(db)
         itemIds.forEach(itemId => {
@@ -151,7 +152,7 @@ export default function useDatabase(){
         setMessage("複数アイテムを削除しました","info",3000)
     }
 
-    const deleteAllItems = async (category) => {
+    const deleteAllItems = async (category: DisplayCategory) => {
         const uid = user.value ? user.value.uid : ""
         const batch = writeBatch(db)
         category.items.forEach(item => {
@@ -162,14 +163,14 @@ export default function useDatabase(){
         setMessage("全アイテムを削除しました","info",3000)
     }
 
-    const incrementValue = async (itemId) => {
+    const incrementValue = async (itemId: string) => {
         const uid = user.value ? user.value.uid : ""
         await updateDoc(doc(db, `users/${uid}/items/${itemId}`), {
             value: increment(1)
         })
     }
 
-    const decrementValue = async (itemId) => {
+    const decrementValue = async (itemId: string) => {
         const uid = user.value ? user.value.uid : ""
         await updateDoc(doc(db, `users/${uid}/items/${itemId}`), {
             value: increment(-1)

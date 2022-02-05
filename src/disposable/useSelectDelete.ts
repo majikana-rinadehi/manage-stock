@@ -4,10 +4,11 @@ const {
     deleteItems 
 } = useDatabase()
 
+type itemIds = Array<string>
 /**
  * 選択されたアイテムのIDを格納する配列
  */
-const selectedItems = ref([])
+const selectedItems = ref<itemIds>([])
 
 const showCheckbox = ref(false)
 

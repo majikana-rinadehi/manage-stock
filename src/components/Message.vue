@@ -1,22 +1,22 @@
-<script setup>
-import useMessage from '../disposable/useMessage.js'
+<script setup lang="ts">
+import useMessage from '../disposable/useMessage'
 
 const { messageRef } = useMessage()
-const isActive = messageRef;
+const isActive = messageRef
 </script>
 
 <template>
   <div  
     class="invisible flex text-base font-black my-4 mx-auto p-2 h-40px w-1/3 rounded-lg box-border align-middle color-gray-900 shadow-around"
     style="font-style: inherit; z-index: 1000;"
-    :class = "[messageRef.kind, {active: isActive}]">
+    :class = "[messageRef.kind, {active: isActive.message}]">
     <!-- ↑:class"{messageRef.kind}"ではない -->
     <div class="text-center w-11/12">
-      {{ messageRef.message ? messageRef.message : "メッセージが表示されます" }}
+      {{ messageRef.message ? messageRef.message : "" }}
     </div>
     <div 
       class="color-gray-900 cursor-pointer hover:color-gray-50"
-      @click="isActive = false">☓</div>
+      @click="isActive = { message: '', kind: '' }">☓</div>
   </div>
 </template>
 

@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import { useAuth } from '../disposable/useAuth'
 import router from '../router/index.js'
 

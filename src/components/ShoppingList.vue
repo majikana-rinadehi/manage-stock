@@ -1,7 +1,8 @@
-<script setup>
+<script setup lang="ts">
 import MemoCategories from './MemoCategories.vue'
 import ShoppingFooter from './ShoppingFooter.vue'
-import useCapture from '../disposable/useCapture.js'
+import { DisplayCategory } from '../disposable/types'
+import useCapture from '../disposable/useCapture'
 import { defineProps, ref, toRefs } from 'vue'
 
 const {
@@ -9,11 +10,13 @@ const {
     deleteCapture
 } = useCapture()
 
-const props = defineProps({
-    show: Boolean,
-    displayCategories: Object,
-    listTitle: String
-})
+interface Props {
+    show: boolean;
+    displayCategories: DisplayCategory[];
+    listTitle?: string;
+}
+
+const props = defineProps<Props>() // eslint-disable-line vue/valid-define-props
 
 const {
     show,

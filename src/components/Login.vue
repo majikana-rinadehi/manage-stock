@@ -1,5 +1,5 @@
-<script setup>
-import { useAuth } from '../disposable/useAuth.js'
+<script setup lang="ts">
+import { useAuth } from '../disposable/useAuth'
 import { ref } from 'vue'
 import router from '../router/index.js'
 
@@ -15,11 +15,6 @@ const logginIn = async () => {
     password.value = ""
 }
 
-// const vFocus = {
-//   mounted(el){
-//     el.focus()
-//   }
-// }
 </script>
 <template>
     <div class="flex flex-col w-2/5 min-w-400 mx-auto bg-gray-light rounded-2xl shadow-around"

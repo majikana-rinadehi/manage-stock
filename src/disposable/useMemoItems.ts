@@ -1,14 +1,15 @@
 import { ref, computed, watch } from 'vue'
+import { Ref } from '@vue/reactivity'
+import { MemoItem } from './types'
 
-const memoItems = ref([])
+const memoItems: Ref<Array<MemoItem>> = ref([])
 // memoItemsをuseMemoItems()スコープ内に入れると、
 // displayItemsが、SyoppingFooter側に反映されない
 // その代わり、スコープ外に置くとMemoCategoriesでのincrementがItemにも反映される。。。？
 
 export default function useMemoItems() {
-    
 
-    const filter = ref((item) => item.period === 1 )
+    const filter = ref((item: MemoItem) => item.period === 1 )
 
     const displayItems = computed(() => {
         if(!filter.value) return memoItems.value

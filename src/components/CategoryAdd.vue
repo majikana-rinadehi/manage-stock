@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import { ref, defineEmits, nextTick } from 'vue'
 
 const emit = defineEmits(['CategoryAdded'])
@@ -58,7 +58,6 @@ const addCategory = () => {
           <input
               ref="inputRef" 
               @keydown.enter="addCategory"
-              @input="inputEvent"
               class="w-full h-6 p-2"
               type="text"
               placeholder="新しいカテゴリ名"
