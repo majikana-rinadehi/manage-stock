@@ -75,8 +75,8 @@ const closeList = () => {
                       />
                     <ItemAdd_2 
                       @item-added="addItem"
-                      :category_name="category.name"
-                      :category_id="category.id"/> <!--タスク追加コンポーネント-->
+                      :category-name="category.name"
+                      :category-id="category.id"/> <!--タスク追加コンポーネント-->
                 </div>
                 <div class="bg-gray-200 mx-2 my-6 p-2 text-sm mx-auto shadow-around" 
                     style="min-width: 420px;">

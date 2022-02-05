@@ -8,7 +8,9 @@
             "name": "きゅうり",
             "value": 1,
             "period": 1,
-            "unit_name": "本"
+            "unit_name": "本",
+            "add_date": "17:29:13",
+            "upd_date": "17:29:13"
           },
           "1": {
             "category_id": 1,
@@ -16,7 +18,9 @@
             "name": "たまご",
             "value": 1,
             "period": 2,
-            "unit_name": "個"
+            "unit_name": "個",
+            "add_date": "17:29:13",
+            "upd_date": "17:29:13"
           },
           "2": {
             "category_id": 1,
@@ -24,7 +28,9 @@
             "name": "納豆",
             "value": 1,
             "period": 3,
-            "unit_name": "パック"
+            "unit_name": "パック",
+            "add_date": "17:29:13",
+            "upd_date": "17:29:13"
           },
           "3": {
             "category_id": 2,
@@ -32,7 +38,9 @@
             "name": "洗剤",
             "value": 1,
             "period": 1,
-            "unit_name": "本"
+            "unit_name": "本",
+            "add_date": "17:29:13",
+            "upd_date": "17:29:13"
           },
           "4": {
             "category_id": 2,
@@ -40,7 +48,9 @@
             "name": "バスマジックリン",
             "value": 1,
             "period": 2,
-            "unit_name": "本"
+            "unit_name": "本",
+            "add_date": "17:29:13",
+            "upd_date": "17:29:13"
           },
           "5": {
             "category_id": 3,
@@ -48,7 +58,9 @@
             "name": "排水溝",
             "value": 1,
             "period": 1,
-            "unit_name": ""
+            "unit_name": "",
+            "add_date": "17:29:13",
+            "upd_date": "17:29:13"
           },
           "6": {
             "category_id": 3,
@@ -56,7 +68,9 @@
             "name": "台所",
             "value": 1,
             "period": 2,
-            "unit_name": ""
+            "unit_name": "",
+            "add_date": "17:29:13",
+            "upd_date": "17:29:13"
           }
         },
         "categories": {

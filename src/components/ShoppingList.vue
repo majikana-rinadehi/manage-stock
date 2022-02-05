@@ -2,7 +2,7 @@
 import MemoCategories from './MemoCategories.vue'
 import ShoppingFooter from './ShoppingFooter.vue'
 import { DisplayCategory } from '../disposable/types'
-import useCapture from '../disposable/useCapture'
+import useCapture from '../disposable/useCapture.js'
 import { defineProps, ref, toRefs } from 'vue'
 
 const {

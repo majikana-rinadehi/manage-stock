@@ -17,7 +17,7 @@ export type MailData = {
 
 
 /**
- * item 
+ * item for frontend
  */
 export interface Item {
     [index: string] : string | number;
@@ -30,6 +30,27 @@ export interface Item {
     period: number;
     /**単位 */
     unit_name: string;
+    /**追加日時・更新日時 */
+    add_date: string;
+    upd_date: string;
+}
+
+/**
+ * item for database
+ */
+ export interface DBItem {
+    [index: string] : string | number;
+    
+    category_id: string;
+    category_name:string;
+    name: string;
+    value: number;
+    period: number;
+    /**単位 */
+    unit_name: string;
+    /**追加日時・更新日時 */
+    add_date: string;
+    upd_date: string;
 }
 
 /**

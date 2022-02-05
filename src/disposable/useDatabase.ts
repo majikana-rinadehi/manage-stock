@@ -14,7 +14,8 @@ import { db } from '../settings/firebase.js'
 import { useAuth } from './useAuth'
 import { ref, computed, ComputedRef } from 'vue'
 import  useMessage  from './useMessage'
-import { Item, Category, DisplayCategory, EditForm } from './types'
+import { Item, DBItem, Category, DisplayCategory, EditForm } from './types'
+import moment from 'moment'
 
 const {
     user
@@ -46,7 +47,9 @@ export default function useDatabase(){
                         "name": data.name,
                         "value": data.value,
                         "period": data.period,
-                        "unit_name": data.unit_name
+                        "unit_name": data.unit_name,
+                        "add_date": data.add_date,
+                        "upd_date": data.upd_date
                     })
                 })
                 items.value = _items
@@ -92,14 +95,18 @@ export default function useDatabase(){
 
       const addItem = async (itemName: string, categoryId: string, categoryName: string) => {
         const uid = user.value ? user.value.uid : ""
-        const docRef = await addDoc(collection(db, `users/${uid}/items`), {
+        const sysdate = moment(new Date()).format("YYYYMMDD HH:MM:SS")
+        const newItem: DBItem = {
             "category_id": categoryId,
             "category_name": categoryName,
             "name": itemName,
             "value": 1,
             "period": 1,
-            "unit_name": ""
-        })
+            "unit_name": "",
+            "add_date": sysdate,
+            "upd_date": sysdate 
+        }
+        const docRef = await addDoc(collection(db, `users/${uid}/items`), newItem)
         console.log(docRef);
         setMessage("アイテムを追加しました","info",3000)
       }
@@ -116,17 +123,20 @@ export default function useDatabase(){
     const updateItem = async (form: EditForm) => {
         const uid = user.value ? user.value.uid : ""
         const itemId = form.id
-        console.log("form: ",form);
-        console.log("itemId: ",itemId);
-        const itemRef = doc(db, `users/${uid}/items/${itemId}`)
-        await updateDoc(itemRef, {
+        const addDate = form.add_date
+        const sysdate = moment(new Date()).format("YYYYMMDD HH:MM:SS")
+        const newItem: DBItem = {
             "category_id": form.category_id,
             "category_name": form.category_name,
             "name": form.name,
             "value": form.value,
             "period": form.period,
-            "unit_name": form.unit_name
-        })
+            "unit_name": form.unit_name,
+            "add_date": addDate,
+            "upd_date": sysdate
+        }
+        const itemRef = doc(db, `users/${uid}/items/${itemId}`)
+        await updateDoc(itemRef, newItem)
         setMessage("アイテムを更新しました","info",3000)
     }
 
@@ -165,15 +175,19 @@ export default function useDatabase(){
 
     const incrementValue = async (itemId: string) => {
         const uid = user.value ? user.value.uid : ""
+        const sysdate = moment(new Date()).format("YYYYMMDD HH:MM:SS")
         await updateDoc(doc(db, `users/${uid}/items/${itemId}`), {
-            value: increment(1)
+            value: increment(1),
+            "upd_date": sysdate
         })
     }
 
     const decrementValue = async (itemId: string) => {
         const uid = user.value ? user.value.uid : ""
+        const sysdate = moment(new Date()).format("YYYYMMDD HH:MM:SS")
         await updateDoc(doc(db, `users/${uid}/items/${itemId}`), {
-            value: increment(-1)
+            value: increment(-1),
+            "upd_date": sysdate
         })
     }
     return {

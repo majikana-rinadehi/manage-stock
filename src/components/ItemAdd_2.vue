@@ -3,10 +3,10 @@ import { toRefs, ref, defineProps, defineEmits, nextTick } from 'vue'
 
 const emit = defineEmits(['ItemAdded'])
 const props = defineProps<{ // eslint-disable-line vue/valid-define-props
-  'category_id': String,
-  'category_name': String
+  categoryId: string,
+  categoryName: string
 }>()
-const { category_id, category_name } = toRefs(props)
+const { categoryId, categoryName } = toRefs(props)
 
 const show = ref(false)
 const item_name = ref("")
@@ -33,7 +33,7 @@ const closeInput = () => {
 
 const addItem = () => {
   if(item_name.value !== '' ){
-      emit('ItemAdded', item_name.value, category_id.value, category_name.value);
+      emit('ItemAdded', item_name.value, categoryId.value, categoryName.value);
       inputRef.value.blur()
       console.log("focusout from input");
       item_name.value = '';

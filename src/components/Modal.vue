@@ -15,7 +15,9 @@ const form = ref<EditForm>({
     name: '',
     value: 0,
     period: 0,
-    unit_name: ''
+    unit_name: '',
+    add_date: '',
+    upd_date: ''
 })
 
 
