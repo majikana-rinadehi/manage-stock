@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import useDatabase from '../disposable/useDatabase'
-import ItemAdd_2 from './ItemAdd_2.vue'
-import CategoryAdd from './CategoryAdd.vue'
-import CategoryItems from './CategoryItems.vue'
-import Modal from './Modal.vue'
-import ShoppingList from './ShoppingList.vue'
-import Header from './Header.vue'
+import ItemAdd_2 from './ItemAdd_2'
+import CategoryAdd from './CategoryAdd'
+import CategoryItems from './CategoryItems'
+import CategoryEdit from './CategoryEdit'
+import EditItem from './EditItem'
+import ShoppingList from './ShoppingList'
+import Header from './Header'
 import { ref, onMounted } from 'vue'
 import { Item } from '@/disposable/types'
 
@@ -25,18 +26,18 @@ const {
 
 onMounted(setListener)
 
-const showModal = ref(false)
-const modalItem = ref<Item>()
+const showEditItem = ref(false)
+const editItem = ref<Item>()
 const showList = ref(false)
 const listTitle = ref("")
 
-const openModal = (item: Item) => {
-  showModal.value = true
-  modalItem.value = item
+const openEditItem = (item: Item) => {
+  showEditItem.value = true
+  editItem.value = item
 }
 
-const closeModal = () => {
-  showModal.value = false
+const closeEditItem = () => {
+  showEditItem.value = false
 }
 
 const openList = (title: string) => {
@@ -62,15 +63,11 @@ const closeList = () => {
                   v-for="(category, index) in computedCategories"
                   v-bind:key="index">
                     <!--カテゴリアイテム-->
-                    <div class="font-black text-lg">
-                        <!--カテゴリ名-->
-                        {{category.name}}
-                    </div>
-                    <div 
-                      class="absolute top-2 right-2"
-                      @click="deleteCategory(category.id)">削除</div>
+                    <CategoryEdit
+                      :category="category"
+                    />
                     <CategoryItems
-                      @open-modal="openModal"
+                      @open-modal="openEditItem"
                       :category="category"
                       />
                     <ItemAdd_2 
@@ -86,13 +83,13 @@ const closeList = () => {
                   </div>
             </div>
         </div> 
-        <Modal 
-          v-show="showModal" 
-          @close-modal="closeModal"
+        <EditItem 
+          v-show="showEditItem" 
+          @close-modal="closeEditItem"
           @delete-item="deleteItem"
           @update-item="updateItem"
-          :item="modalItem"
-          :show="showModal"/>
+          :item="editItem"
+          :show="showEditItem"/>
         <ShoppingList
           v-show="showList"
           :show="showList"

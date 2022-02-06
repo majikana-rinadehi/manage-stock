@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { defineProps, defineEmits, toRefs } from 'vue'
-import Item from './Item.vue'
+import Item from './Item'
 import useItemFilters from '../disposable/useItemFilters'
 import useDatabase from '../disposable/useDatabase'
 import { DisplayCategory } from '@/disposable/types'

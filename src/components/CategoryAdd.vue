@@ -1,13 +1,22 @@
 <script setup lang="ts">
-import { ref, defineEmits, nextTick } from 'vue'
+import { ref, defineEmits, defineProps, nextTick, toRefs, watch } from 'vue'
+import { Category } from '../disposable/types'
 
 const emit = defineEmits(['CategoryAdded'])
-
+const props = defineProps<{
+  category: Category
+}>()
+const { category } = toRefs(props)
 const show = ref(false)
 const categoryName = ref("")
 const inputRef = ref(null)
 const buttonRef = ref(null)
-// const isComposing = ref(false)
+
+watch(show, (newValue) => {
+  if(newValue) {
+    categoryName.value = category.value.name
+  }
+})
 
 // 「+カテゴリを追加」押下時
 const showInput = () => {
@@ -53,15 +62,15 @@ const addCategory = () => {
   </div>
   <div 
     v-show="show"
-    class="flex justify-end mx-2 hover:bg-gray-300 rounded-lg">
+    class="flex justify-end mx-2 rounded-lg">
       <div class="justify-self-start mr-auto p-2">
-          <input
-              ref="inputRef" 
-              @keydown.enter="addCategory"
-              class="w-full h-6 p-2"
-              type="text"
-              placeholder="新しいカテゴリ名"
-              v-model="categoryName">
+        <input
+            ref="inputRef" 
+            @keydown.enter="addCategory"
+            class="w-full h-6 p-2"
+            type="text"
+            placeholder="新しいカテゴリ名"
+            v-model="categoryName">
       </div>
       <div class="flex m-2">
           <button 
