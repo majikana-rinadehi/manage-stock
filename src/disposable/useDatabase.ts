@@ -75,9 +75,9 @@ export default function useDatabase(){
     // nested items in each categories
     // to display in Home.vue
     const computedCategories: ComputedRef<DisplayCategory[]>  = computed(() => {
-        let displayCategories: DisplayCategory[] = []
+        const displayCategories: DisplayCategory[] = []
         categories.value.map(category => {
-          let dispItems = ref<Item[]>()
+          const dispItems = ref<Item[]>()
           console.log(items.value);
           dispItems.value = items.value.filter(item => {
               console.log(item.category_id, category.id);
@@ -95,7 +95,7 @@ export default function useDatabase(){
 
       const addItem = async (itemName: string, categoryId: string, categoryName: string) => {
         const uid = user.value ? user.value.uid : ""
-        const sysdate = moment(new Date()).format("YYYYMMDD HH:MM:SS")
+        const sysdate = moment(new Date()).toISOString()
         const newItem: DBItem = {
             "category_id": categoryId,
             "category_name": categoryName,
@@ -124,7 +124,7 @@ export default function useDatabase(){
         const uid = user.value ? user.value.uid : ""
         const itemId = form.id
         const addDate = form.add_date
-        const sysdate = moment(new Date()).format("YYYYMMDD HH:MM:SS")
+        const sysdate = moment(new Date()).toISOString()
         const newItem: DBItem = {
             "category_id": form.category_id,
             "category_name": form.category_name,
@@ -175,7 +175,7 @@ export default function useDatabase(){
 
     const incrementValue = async (itemId: string) => {
         const uid = user.value ? user.value.uid : ""
-        const sysdate = moment(new Date()).format("YYYYMMDD HH:MM:SS")
+        const sysdate = moment(new Date()).toISOString()
         await updateDoc(doc(db, `users/${uid}/items/${itemId}`), {
             value: increment(1),
             "upd_date": sysdate
@@ -184,7 +184,7 @@ export default function useDatabase(){
 
     const decrementValue = async (itemId: string) => {
         const uid = user.value ? user.value.uid : ""
-        const sysdate = moment(new Date()).format("YYYYMMDD HH:MM:SS")
+        const sysdate = moment(new Date()).toISOString()
         await updateDoc(doc(db, `users/${uid}/items/${itemId}`), {
             value: increment(-1),
             "upd_date": sysdate

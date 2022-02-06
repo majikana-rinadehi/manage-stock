@@ -21,8 +21,9 @@ const {
 </script>
 <template>
     <div class="flex justify-evenly my-2">
-        <button @click="setFilter('sortByPeriod')">期限で並び替え</button>
-        <button @click="setFilter('sortByValue')">数量で並び替え</button>
+        <button @click="setFilter('sortByPeriod')">期限</button>
+        <button @click="setFilter('sortByValue')">数量</button>
+        <button @click="setFilter('sortByAddDate')">作成日</button>
         <button @click="deleteAllItems(category)">全削除</button>
     </div>
     <div class="flex justify-end m-2 bg-white p-2"

@@ -1,19 +1,18 @@
 /* eslint-disable no-unused-vars */
-import { computed, ref, watch, onMounted } from 'vue'
+import { computed, ref, ComputedRef } from 'vue'
 import { DisplayCategory, Item } from './types'
 import { Ref } from '@vue/reactivity'
+import moment from 'moment'
 
 export default function useItemFilters(category: Ref<DisplayCategory>){
 
-    const filter: Ref<null | ((a: Item, b: Item) => number)> = ref(null) // setFilterによってソート関数が割り当てられる
-    const computedItems = ref([]) 
-    // ↑ CRUD 操作があったときに、category の変化を検知して、
-    // category.value.items のディープコピーを代入する
-
-    const filteredItems = ref<Item[]>([]) 
-    // ↑ 最終的に Item.vue の template に表示するもの
-    // filterが変更されたときに、computedItems.value を
-    // 新しい filter でソートしたもののディープコピーを代入する
+    const filter: Ref<null | ((a: Item, b: Item) => number)> = ref(
+        (itemA: Item, itemB: Item) => {
+            const valueA = itemA.add_date
+            const valueB = itemB.add_date
+            return moment(valueA).isAfter(valueB) ? 1 : -1 // 作成日時の昇順で並び替え
+          }
+    ) // setFilterによってソート関数が割り当てられる
 
     const setFilter = (filterKind: string) => {
         if (filterKind === 'sortByPeriod'){
@@ -29,51 +28,30 @@ export default function useItemFilters(category: Ref<DisplayCategory>){
             filter.value = (itemA, itemB) => {
                 const valueA = itemA.value
                 const valueB = itemB.value
-                return valueA - valueB // 残り期限日数の昇順で並び替え
+                return valueA - valueB // 残り個数の昇順で並び替え
+              }
+        } else if(filterKind === 'sortByAddDate'){
+            console.log("sortByAddDate");
+            filter.value = (itemA, itemB) => {
+                const valueA = itemA.add_date
+                const valueB = itemB.add_date
+                return moment(valueA).isAfter(valueB) ? 1 : -1 // 作成日時の昇順で並び替え
               }
         } else {
             console.log("no filter");
             filter.value = null
         }
     }
-
-    // const computedItems = computed(() => {
-    //     return category.value.items
-    // })
-
-    // 初回読み込み時に表示するため
-    onMounted(() => {
-        computedItems.value = Object.assign([], category.value.items) 
-    })
-
-    // watch(category.value や watch(category.value.items
-    // では、CRUD 操作があったとき、つまりcategory.value.items
-    // に変化があってもwatch が反応しない
-    // → category.value.items がリアクティブではないため?
-    watch(category, () => { 
-        console.log("watched");
-        computedItems.value = Object.assign([], category.value.items) 
-    })
-
-    watch(filter, () => {
-        if (filter.value) {
-            console.log("sort start");
-            const _filteredItems = computedItems.value.sort(filter.value)
-            console.log(_filteredItems); // ← sortByPeriodを押すと_filteredItemsまでは反映される
-            // Object.assign(filteredItems.value, _filteredItems) //これではフィルターが反映されない
-            filteredItems.value = Object.assign([], _filteredItems)
-            return
-        }
-        Object.assign(filteredItems.value, category.value.items)
-    })
     
-    const filteredDisplayItems = computed(() => {
+    const filteredDisplayItems: ComputedRef<Item[]> = computed(() => {
         console.log("start compute");
-        console.log(filteredItems);
-        console.log(filteredItems.value);
-        return filteredItems.value.length ?
-                filteredItems.value :
-                computedItems.value
+        console.log("filter")
+        console.log(filter.value)
+        console.log("category.value.items")
+        console.log(category.value.items)
+        return filter.value
+            ? category.value.items.sort(filter.value)
+            : category.value.items
     })
 
     return {
