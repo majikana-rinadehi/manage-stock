@@ -20,7 +20,8 @@ const {
 } = useItemFilters(category)
 </script>
 <template>
-    <div class="flex justify-evenly my-2">
+    <div class="flex justify-evenly my-2"
+        v-show="filteredDisplayItems.length">
         <button @click="setFilter('sortByPeriod')">期限</button>
         <button @click="setFilter('sortByValue')">数量</button>
         <button @click="setFilter('sortByAddDate')">作成日</button>

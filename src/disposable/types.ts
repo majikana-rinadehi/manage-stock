@@ -56,12 +56,12 @@ export interface Item {
 /**
  * modal form object for editing items
  */
-export interface EditForm extends Item{}
+export interface EditForm extends Item{} /* eslint-disable-line @typescript-eslint/no-empty-interface */
 
 /**
  * memoItems
  */
-export interface MemoItem extends Item {}
+export interface MemoItem extends Item {} /* eslint-disable-line @typescript-eslint/no-empty-interface */
 
 /**
  * category
@@ -69,6 +69,8 @@ export interface MemoItem extends Item {}
 export interface Category{
     id: string;
     name: string;
+    add_date: string;
+    upd_date: string;
 }
 
 /**

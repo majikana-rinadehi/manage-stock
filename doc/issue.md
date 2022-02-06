@@ -1,3 +1,13 @@
+### 20220206 15:30~
+- カテゴリの並び順 add_date, upd_date追加 15:30~
+    - //追加、更新処理変更
+    - //既存データ
+    - 並び替えメソッド
+- カテゴリ編集ボタン
+    - 名前変更
+    - 削除
+- カテゴリ削除、全削除のときの確認ボタン「ほんとにいいの？？？」
+
 ### 20220205-2
 node v14.16.1
 npm 8.3.0
@@ -36,6 +46,8 @@ Occurred while linting /Users/nakajimahidenari/Documents/app/manage-stock/src/ma
         "parser": "@typescript-eslint/parser"
     },
 ```
+
+=> 解決
 
 ### 20220205
 作成日付or更新日付によって並び替える

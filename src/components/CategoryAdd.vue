@@ -13,7 +13,7 @@ const buttonRef = ref(null)
 const showInput = () => {
   show.value = true
   nextTick(() => {
-    inputRef.value.focus()
+    inputRef.value.focus() 
   })
 }
 

@@ -62,7 +62,9 @@ export default function useDatabase(){
                 querySnapshot.forEach(doc => {
                     _categories.push({
                         id: doc.id,
-                        name: doc.data().name
+                        name: doc.data().name,
+                        add_date: doc.data().add_date,
+                        upd_date: doc.data().upd_date
                     })
                 })
                 categories.value = _categories
@@ -87,10 +89,16 @@ export default function useDatabase(){
           displayCategories.push({  
             id: category.id,
             name: category.name,
-            items: dispItems.value
+            items: dispItems.value,
+            add_date: category.add_date,
+            upd_date: category.upd_date
           })
         })
-        return displayCategories
+        return displayCategories.sort((categoryA: Category, categoryB: Category ) => {
+            const valueA: string = categoryA.add_date
+            const valueB: string = categoryB.add_date
+            return moment(valueA).isAfter(valueB) ? 1 : -1
+        } )
       })
 
       const addItem = async (itemName: string, categoryId: string, categoryName: string) => {
@@ -113,8 +121,11 @@ export default function useDatabase(){
 
       const addCategory = async(categoryName: string) => {
         const uid = user.value ? user.value.uid : ""
+        const sysdate = moment(new Date()).toISOString()
         const docRef = await addDoc(collection(db, `users/${uid}/categories`), {
-            "name": categoryName
+            "name": categoryName,
+            "add_date": sysdate,
+            "upd_date": sysdate
         })
         console.log(docRef);
         setMessage("カテゴリを追加しました","info",3000)
