@@ -14,7 +14,7 @@ const buttonRef = ref(null)
 
 watch(show, (newValue) => {
   if(newValue) {
-    categoryName.value = category.value.name
+    categoryName.value = category.value ? category.value.name : ""
   }
 })
 

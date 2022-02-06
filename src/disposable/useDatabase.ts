@@ -151,6 +151,19 @@ export default function useDatabase(){
         setMessage("アイテムを更新しました","info",3000)
     }
 
+    const updateCategory = async (categoryName: string, categoryId: string) => {
+        const uid = user.value ? user.value.uid : ""
+        const sysdate = moment(new Date()).toISOString()
+        const categoryRef = doc(db, `users/${uid}/categories/${categoryId}`)
+        const newCategory = {
+            "id": categoryId,
+            "name": categoryName,
+            "upd_date": sysdate
+        }
+        await updateDoc(categoryRef, newCategory)
+        setMessage("カテゴリを更新しました", "info", 3000)
+    }
+
     const deleteItem = async (itemId: string) => {
         const uid = user.value ? user.value.uid : ""
         await deleteDoc(doc(db, `users/${uid}/items/${itemId}`))
@@ -207,6 +220,7 @@ export default function useDatabase(){
         addItem,
         addCategory,
         deleteCategory,
+        updateCategory,
         updateItem,
         deleteItem,
         incrementValue,

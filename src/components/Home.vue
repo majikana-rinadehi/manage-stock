@@ -16,6 +16,7 @@ const {
   addItem,
   addCategory,
   deleteCategory,
+  updateCategory,
   updateItem,
   deleteItem
 } = useDatabase()
@@ -48,6 +49,14 @@ const openList = (title: string) => {
 const closeList = () => {
   showList.value = false
 }
+
+const updatingCategory = (categoryName: string, categoryId: string) => {
+  updateCategory(categoryName, categoryId)
+}
+
+const deletingCategory = (categoryId: string) => {
+  deleteCategory(categoryId)
+}
 </script>
 
 <template>
@@ -65,6 +74,8 @@ const closeList = () => {
                     <!--カテゴリアイテム-->
                     <CategoryEdit
                       :category="category"
+                      @update="updatingCategory"
+                      @delete="deletingCategory"
                     />
                     <CategoryItems
                       @open-modal="openEditItem"
