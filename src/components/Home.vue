@@ -67,7 +67,7 @@ const deletingCategory = (categoryId: string) => {
             <!--①,②,③-->
             <div class="flex flex-wrap">
                 <!--①:カテゴリアイテム-->
-                <div class="relative bg-gray-200 mx-2 my-6 p-2 text-sm mx-auto shadow-around" 
+                <div class="static bg-gray-200 mx-2 my-6 p-2 text-sm mx-auto shadow-around" 
                     style="min-width: 420px;"
                   v-for="(category, index) in computedCategories"
                   v-bind:key="index">
@@ -91,7 +91,7 @@ const deletingCategory = (categoryId: string) => {
                   <CategoryAdd
                     @category-added="addCategory"
                     />
-                  </div>
+                </div>
             </div>
         </div> 
         <EditItem 
