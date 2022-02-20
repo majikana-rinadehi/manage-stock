@@ -3,16 +3,37 @@ import { useAuth } from '../disposable/useAuth'
 import { ref } from 'vue'
 import router from '../router/index.js'
 
-const { login, auth } = useAuth()
+const { login, auth, addUser } = useAuth()
 
 const email = ref('')
 const password = ref('')
+const showCreateUserForm = ref(false)
+const signupEmail = ref('')
+const signupPassword = ref('')
 
 const logginIn = async () => {
     await login(auth, email.value, password.value)
     router.push("/")
     email.value = ""
     password.value = ""
+    signupEmail.value = ""
+    signupPassword.value = ""
+}
+
+const signingUp = async () => {
+    await addUser(signupEmail.value, signupPassword.value)
+        .then(() => {
+            email.value = ""
+            password.value = ""
+            signupEmail.value = ""
+            signupPassword.value = ""
+            showCreateUserForm.value = false
+        })
+
+}
+
+const showingCreateUserForm = () => {
+    showCreateUserForm.value = true
 }
 
 </script>
@@ -33,7 +54,30 @@ const logginIn = async () => {
                 </div>
         </div>
         <div class="flex w-4/5 h-8 my-4 mx-auto justify-center">
-        <button class="btn hover:bg-yellow-700" @click="logginIn">Login</button>
+            <button class="btn hover:bg-yellow-700" @click="logginIn">Login</button>
+        </div>
+        <div class="mt-4 mx-auto justify-center">
+            ===または===
+        </div>
+        <div class="mx-auto justify-center">
+            <a href="#" @click="showingCreateUserForm">
+                ユーザーを新規作成
+            </a>
+        </div>
+        <div v-show="showCreateUserForm" 
+            class="w-4/5 my-4 mx-auto justify-center">
+            <div class="my-4 flex justify-end">
+                <!--編集項目のひとかたまり-->
+                <label class="mr-auto" for="user">mail</label>
+                <input type="text" id="user" v-model="signupEmail">
+            </div>
+            <div class="my-4 flex justify-end">
+                 <label class="mr-auto" for="mail">password</label>
+                 <input type="password" id="mail" v-model="signupPassword">
+            </div>
+            <div class="flex w-4/5 h-8 my-4 mx-auto justify-center">
+                <button class="btn hover:bg-yellow-700" @click="signingUp">SignUp</button>
+            </div>
         </div>
     </div>
 </template>

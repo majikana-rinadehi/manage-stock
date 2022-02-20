@@ -1,4 +1,4 @@
-import { getAuth, signInWithEmailAndPassword, signOut, User } from 'firebase/auth'
+import { getAuth, signInWithEmailAndPassword, signOut, User, createUserWithEmailAndPassword  } from 'firebase/auth'
 import { firebaseApp } from '../settings/firebase.js'
 import { ref } from 'vue'
 import useMessage from './useMessage'
@@ -24,7 +24,12 @@ const useAuth = () => {
         isAuthenticated.value = false
         setMessage("ログアウトしました","info",3000)
     }
-    return { login, logout, auth, user, isAuthenticated }
+
+    const addUser = async(email: string, password: string) => {
+        await createUserWithEmailAndPassword(auth, email, password)
+        setMessage("ユーザーを作成しました","info",3000)
+    }
+    return { login, logout, auth, user, isAuthenticated, addUser }
 }
 
 export { useAuth }

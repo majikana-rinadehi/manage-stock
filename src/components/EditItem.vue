@@ -60,14 +60,14 @@ watch(show, (newValue) => {
                     </button>
                 </div>
                 <div>
-                <button 
-                        class="px-4 py-2 bg-red-500 hover:bg-red-700 
-                    text-white rounded-lg font-bold text-xs"
-                        @click="$emit('deleteItem', form.id),
-                                $emit('closeModal')">
-                    アイテムを削除
-                </button><!--削除-->
-            </div>
+                    <button 
+                            class="px-4 py-2 bg-red-500 hover:bg-red-700 
+                        text-white rounded-lg font-bold text-xs"
+                            @click="$emit('deleteItem', form.id),
+                                    $emit('closeModal')">
+                        アイテムを削除
+                    </button><!--削除-->
+                </div>
             </div>
             <div class="my-4">
                 <!--編集項目のひとかたまり-->
