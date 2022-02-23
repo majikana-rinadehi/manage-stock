@@ -1,36 +1,39 @@
 <script setup lang="ts">
 import { useAuth } from '../disposable/useAuth'
-import { ref, reactive, computed, onMounted } from 'vue'
+import { reactive, computed } from 'vue'
 import router from '../router/index.js'
-import { REGEXP_MAIL, REGEXP_PASSWORD } from '../disposable/regex'
+import useVuelidate from '@vuelidate/core'
+import { required, email } from '@vuelidate/validators'
 
 const { login, auth } = useAuth()
 
-const email = ref('')
-const password = ref('')
-const errors = reactive<{[index: string]: boolean}>({"mail": false, "password": false})
-const isAllValid = computed(() => {
-    console.log(Object.keys(errors))
-    console.log(Object.keys(errors).map(property => errors[property]))
-    return Object.keys(errors).map(property => errors[property]).every(v => v === false)
+const state = reactive ({
+    mail: '',
+    password: ''
 })
+const rules = {
+    mail: { required, email },
+    password: { required }
+}
+const v$ = useVuelidate(rules, state)
+
+const isAllValid = computed(() => {
+    return v$.value.$errors.length === 0
+})
+
+const validating = async () => {
+    await v$.value.$validate()
+}
 
 const logginIn = async () => {
-    await login(auth, email.value, password.value)
-    router.push("/")
-    email.value = ""
-    password.value = ""
+    validating()
+    if(isAllValid.value === true){
+        await login(auth, state.mail, state.password)
+        router.push("/")
+        state.mail = ""
+        state.password = ""
+    }
 }
-
-const validate = () => {
-    console.log('validate')
-    errors.mail = !REGEXP_MAIL.test(email.value)
-    errors.password = !REGEXP_PASSWORD.test(password.value)
-}
-
-onMounted(() => {
-    validate()
-})
 
 </script>
 <template>
@@ -40,17 +43,24 @@ onMounted(() => {
             class="flex flex-col w-3/5 mx-auto my-4 px-4 pt-0 pb-8 bg-gray-lightest "
             style="font: inherit;">
             <div class="flex flex-col h-16 mb-4 p-2 items-center">
-                <div class="self-start text-base h-40">email</div>
-                <input @input="validate" type="text" id="email-input" v-model="email">
-                <div class="text-xs" :class="[errors.mail ? 'text-red-600' : 'text-green-600']">
-                    {{ errors.mail ? "メールアドレスの形式が変!" : "✓"}}
+                <div class="self-start text-base h-40">mail</div>
+                <input type="text" id="email-input" v-model="state.mail">
+                <div v-for="error of v$.mail.$errors" :key="error.$uid">
+                    <div v-show="error.$validator === 'email'" class="text-xs text-red-600">
+                        メールアドレスの形式が変!
+                    </div>
+                    <div v-show="error.$validator === 'required'" class="text-xs text-red-600">
+                        メールアドレスがないんですけど
+                    </div>
                 </div>
             </div>
             <div class="flex flex-col h-16 items-center">
                 <div class="self-start text-base h-40">password</div>
-                <input @input="validate" type="password" id="password-input" v-model="password">
-                <div class="text-xs" :class="[errors.password ? 'text-red-600' : 'text-green-600']">
-                    {{ errors.password ? "パスワードは半角英数字記号で!" : "✓"}}
+                <input type="password" id="password-input" v-model="state.password">
+                <div v-for="error of v$.password.$errors" :key="error.$uid">
+                    <div v-show="error.$validator === 'required'" class="text-xs text-red-600">
+                        パスワードがないんですけど
+                    </div>
                 </div>
             </div>
         </div>
