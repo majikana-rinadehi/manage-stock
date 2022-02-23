@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useAuth } from '../disposable/useAuth'
-import { ref } from 'vue'
+import { ref, nextTick } from 'vue'
 import router from '../router/index.js'
 
 const { login, auth, addUser } = useAuth()
@@ -10,6 +10,7 @@ const password = ref('')
 const showCreateUserForm = ref(false)
 const signupEmail = ref('')
 const signupPassword = ref('')
+const inputEmail = ref(null)
 
 const logginIn = async () => {
     await login(auth, email.value, password.value)
@@ -34,6 +35,9 @@ const signingUp = async () => {
 
 const showingCreateUserForm = () => {
     showCreateUserForm.value = true
+    nextTick(() => {
+        inputEmail.value.focus()
+    })
 }
 
 </script>
@@ -44,7 +48,7 @@ const showingCreateUserForm = () => {
             class="flex flex-col w-3/5 mx-auto my-4 px-4 pt-0 pb-8 bg-gray-lightest "
             style="font: inherit;">
             <div class="flex flex-col h-12 mb-4 p-2 items-center">
-                <div class="self-start text-base h-40">email</div>
+                <div class="self-start text-base h-40">mail</div>
                 <!-- <input v-focus type="text" id="email-input" v-model="email"> -->
                 <input type="text" id="email-input" v-model="email">
             </div>
@@ -69,7 +73,7 @@ const showingCreateUserForm = () => {
             <div class="my-4 flex justify-end">
                 <!--編集項目のひとかたまり-->
                 <label class="mr-auto" for="user">mail</label>
-                <input type="text" id="user" v-model="signupEmail">
+                <input ref="inputEmail" type="text" id="user" v-model="signupEmail">
             </div>
             <div class="my-4 flex justify-end">
                  <label class="mr-auto" for="mail">password</label>
