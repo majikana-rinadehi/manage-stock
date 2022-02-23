@@ -17,7 +17,7 @@ export default function useMemoItems() {
             .filter(filter.value)
     })
 
-    let mailText = ref("")
+    const mailText = ref("")
 
     watch(displayItems, (newValue)=>{
         console.log("displayItems changed")
