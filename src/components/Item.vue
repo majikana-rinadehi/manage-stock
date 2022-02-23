@@ -7,17 +7,20 @@ import type { Item } from '../disposable/types'
 const props = defineProps<{ // eslint-disable-line vue/valid-define-props
     item: Item 
 }>() 
-
 defineEmits(['incrementValue','decrementValue'])
+
 const {
     incrementValue,
     decrementValue
 } = useDatabase()
+
 const { item } = toRefs(props)
+
 const {
     selectedItems,
     showCheckbox
 } = useSelectDelete()
+
 const toggleSelected = () => {
     const index = selectedItems.value.indexOf(item.value.id)
     if(index !== -1){
@@ -26,9 +29,11 @@ const toggleSelected = () => {
     }
     selectedItems.value.push(item.value.id)
 }
+
 const isSelected = computed(() => {
     return selectedItems.value.indexOf(item.value.id) !== -1;
 })
+
 </script>
 <template>
     <div v-show="showCheckbox" 
