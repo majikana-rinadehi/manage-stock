@@ -15,7 +15,7 @@ const useAuth = () => {
         console.log(userCredential);
         user.value = userCredential.user
         isAuthenticated.value = true
-        setMessage("ログインしました","info",3000)
+        setMessage("おかえりなさい(-v-)","info",3000)
     }
 
     const logout = async (auth: any) => {

@@ -7,7 +7,7 @@ const isActive = messageRef
 
 <template>
   <div  
-    class="invisible flex text-base font-black my-4 mx-auto p-2 h-40px w-1/3 rounded-lg box-border align-middle color-gray-900 shadow-around"
+    class="invisible relative flex text-base font-black my-4 mx-auto p-2 h-40px w-1/3 rounded-lg box-border align-middle color-gray-900 shadow-around"
     style="font-style: inherit; z-index: 1000;"
     :class = "[messageRef.kind, {active: isActive.message}]">
     <!-- ↑:class"{messageRef.kind}"ではない -->
