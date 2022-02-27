@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { defineEmits, ref } from 'vue'
 import { Ref } from '@vue/reactivity'
-import useMemoItems from '../disposable/useMemoItems'
-import useMessage from '../disposable/useMessage'
-import { MailData } from '../disposable/types'
+import useMemoItems from '../composable/useMemoItems'
+import useMessage from '../composable/useMessage'
+import { MailData } from '../composable/types'
 import { firebaseApp } from '../settings/firebase.js'
 import { getFunctions, httpsCallable } from 'firebase/functions'
 defineEmits(['capture-memo-items', 'open-capture'])

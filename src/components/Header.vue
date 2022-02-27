@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import useSelectDelete from '../disposable/useSelectDelete'
+import useSelectDelete from '../composable/useSelectDelete'
 
 const {
     showCheckbox,

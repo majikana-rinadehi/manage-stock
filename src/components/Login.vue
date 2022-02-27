@@ -1,20 +1,19 @@
 <script setup lang="ts">
-import { useAuth } from '../disposable/useAuth'
+import CreateUserForm from './CreateUserForm.vue'
+import { useAuth } from '../composable/useAuth'
 import { ref, nextTick } from 'vue'
 import { reactive, computed } from 'vue'
 import router from '../router/index.js'
 import useVuelidate from '@vuelidate/core'
 import { required, email } from '@vuelidate/validators'
 
-const { login, auth, addUser } = useAuth()
+const { login, auth } = useAuth()
 
 const showCreateUserForm = ref(false)
-const signupEmail = ref('')
-const signupPassword = ref('')
-const inputEmail = ref(null)
+const createUserFormRef = ref(null)
 const state = reactive ({
     mail: '',
-    password: ''
+    password: '',
 })
 const rules = {
     mail: { required, email },
@@ -38,21 +37,10 @@ const logginIn = async () => {
     }
 }
 
-const signingUp = async () => {
-    await addUser(signupEmail.value, signupPassword.value)
-        .then(() => {
-            state.mail = ""
-            state.password = ""
-            signupEmail.value = ""
-            signupPassword.value = ""
-            showCreateUserForm.value = false
-        })
-}
-
 const showingCreateUserForm = () => {
     showCreateUserForm.value = true
     nextTick(() => {
-        inputEmail.value.focus()
+        createUserFormRef.value.inputEmailRef.focus()
     })
 }
 </script>
@@ -96,21 +84,9 @@ const showingCreateUserForm = () => {
                 ユーザーを新規作成
             </a>
         </div>
-        <div v-show="showCreateUserForm" 
-            class="w-4/5 my-4 mx-auto justify-center">
-            <div class="my-4 flex justify-end">
-                <!--編集項目のひとかたまり-->
-                <label class="mr-auto" for="user">mail</label>
-                <input ref="inputEmail" type="text" id="user" v-model="signupEmail">
-            </div>
-            <div class="my-4 flex justify-end">
-                 <label class="mr-auto" for="mail">password</label>
-                 <input type="password" id="mail" v-model="signupPassword">
-            </div>
-            <div class="flex w-4/5 h-8 my-4 mx-auto justify-center">
-                <button class="btn hover:bg-yellow-700" @click="signingUp">SignUp</button>
-            </div>
-        </div>
+        <CreateUserForm 
+            ref="createUserFormRef"
+            v-show="showCreateUserForm"/>
     </div>
 </template>
 <style scoped>

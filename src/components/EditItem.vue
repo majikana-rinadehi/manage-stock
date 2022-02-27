@@ -1,12 +1,23 @@
 <script setup lang="ts">
-import { ref, defineProps,  watch, toRefs, nextTick } from 'vue'
-import type { EditForm } from '../disposable/types'
+import { ref, defineProps, defineEmits, watch, toRefs, nextTick, computed } from 'vue'
+import type { EditForm } from '../composable/types'
+import { useVuelidate } from '@vuelidate/core'
+import { required, minValue, and, decimal } from '@vuelidate/validators';
 
-const props = defineProps(['item','show'])
+// const emit = defineEmits(['closeModal', 'deleteItem', 'updateItem'])
+const props = defineProps<{
+    item: any,
+    show: boolean
+}>()
 const {
     item,
     show
 } = toRefs(props)
+// const emit = defineEmits<{
+//     (event: 'closeModal'): void,
+//     (event: 'deleteItem', id: string): void,
+//     (event: 'updateItem', item: EditForm): void,
+// }>()
 
 const form = ref<EditForm>({
     id: '',
@@ -20,25 +31,48 @@ const form = ref<EditForm>({
     upd_date: ''
 })
 
+const valueRule = and(minValue(0), decimal)
+const rules = computed(() => ({
+    name: { required },
+    value: { valueRule },
+    period: { valueRule }
+}))
+
+const v$ = useVuelidate(rules, form, { $scope: false })
 
 const inputRef = ref()
+const isAllValid = computed(() => v$.value.$errors.length === 0)
 
 watch(show, (newValue) => {
     if(newValue){
-        nextTick(() => inputRef.value.focus())
-        Object.assign(form.value, item.value)
+        init()
         return
+    } else {
+        clear()
     }
+})
+
+const init = () => {
+    nextTick(() => inputRef.value.focus())
+    Object.assign(form.value, item.value)
+}
+
+const clear = () => {
     inputRef.value.blur()
     Object.keys(form.value).forEach(key => {
-        if(typeof form.value[key] === 'string'){
-            form.value[key] = ''
-        }
-        if(typeof form.value[key] === 'number'){
-            form.value[key] = 0
-        }
+        form.value[key] = typeof form.value[key] === 'string'
+                        ? ''
+                        : 0
     })
-})
+}
+
+// const closingModal = () => emit('closeModal')
+// const updatingItem = () => {
+//     if (!isAllValid.value) return
+//     emit('updateItem', form.value)
+//     emit('closeModal')
+// }
+// const deletingItem = () => emit('deleteItem', form.value.id); emit('closeModal')
 </script>
 
 <template>
@@ -63,8 +97,7 @@ watch(show, (newValue) => {
                     <button 
                             class="px-4 py-2 bg-red-500 hover:bg-red-700 
                         text-white rounded-lg font-bold text-xs"
-                            @click="$emit('deleteItem', form.id),
-                                    $emit('closeModal')">
+                            @click="$emit('deleteItem', form.id), $emit('closeModal')">
                         アイテムを削除
                     </button><!--削除-->
                 </div>
@@ -78,43 +111,66 @@ watch(show, (newValue) => {
                 <input
                     ref="inputRef" 
                     class="border rounded-lg px-4 py-2 text-xs"
-                    v-model="form.name"><!--カテゴリ名-->
+                    v-model="form.name"
+                    @input="v$.$touch"><!--カテゴリ名-->
+                <div v-for="error in v$.name.$errors"
+                    :key="error.$uid">
+                    <div class="text-xs text-right text-red-500"
+                        v-if="error.$validator==='required'">
+                        アイテム名は必須です!
+                    </div>
+                </div>
             </div>
-            <div class="my-4 flex justify-end">
+            <div class="my-4">
                 <!--編集項目のひとかたまり-->
-                <label class="mr-auto">
+                <label class="mr-44">
                     <!--数量-->
                     数量
                 </label>
                 <input class="w-14 border rounded-lg text-center"
-                    v-model.number="form.value"><!--数量-->
+                    type="number"
+                    v-model.number="form.value"
+                    @input="v$.$touch"><!--数量-->
+                <div v-for="error in v$.value.$errors"
+                    :key="error.$uid">
+                    <div class="text-xs text-right text-red-500"
+                        v-if="error.$validator==='valueRule'">
+                        数量は0以上の整数で！
+                    </div>
+                </div>
             </div>
-            <div class="my-4 flex justify-end">
+            <div class="my-4">
                 <!--編集項目のひとかたまり-->
-                <label class="mr-auto">
+                <label class="mr-44">
                     <!--個数の単位-->
                     単位
                 </label>
                 <input class="w-14 border rounded-lg text-center"
                     v-model.number="form.unit_name">
             </div>
-            <div class="my-4 flex justify-end">
+            <div class="my-4">
                 <!--編集項目のひとかたまり-->
-                <label class="mr-auto">
-                    <!--賞味期限-->
+                <label class="mr-36">
+                    <!--残り日数-->
                     残り日数
                 </label>
-                <input type="text" 
+                <input type="number" 
                     class="w-14 border rounded-lg text-center"
-                
-                    v-model.number="form.period"><!--賞味期限-->
+                    v-model.number="form.period"
+                    @input="v$.$touch"><!--残り日数-->
+                <div v-for="error in v$.period.$errors"
+                    :key="error.$uid">
+                    <div class="text-xs text-right text-red-500"
+                        v-if="error.$validator==='valueRule'">
+                        残り日数は0以上の整数で！
+                    </div>
+                </div>
             </div>
             <div>
                 <!-- 更新ボタン -->
                 <button class="px-4 py-2 bg-green-500 hover:bg-green-700 
                     text-white rounded-lg font-bold text-xs"
-                    @click="$emit('updateItem', form),
-                            $emit('closeModal')">
+                    @click="$emit('updateItem', form), $emit('closeModal')">
                     更新
                 </button>
             </div>

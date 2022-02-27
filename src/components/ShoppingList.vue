@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import MemoCategories from './MemoCategories.vue'
 import ShoppingFooter from './ShoppingFooter.vue'
-import { DisplayCategory } from '../disposable/types'
-import useCapture from '../disposable/useCapture.js'
+import { DisplayCategory } from '../composable/types'
+import useCapture from '../composable/useCapture.js'
 import { defineProps, ref, toRefs } from 'vue'
 
 const {

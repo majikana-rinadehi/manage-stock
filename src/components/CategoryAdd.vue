@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, defineEmits, defineProps, nextTick, toRefs, watch } from 'vue'
-import { Category } from '../disposable/types'
+import { Category } from '../composable/types'
 
 const emit = defineEmits(['CategoryAdded'])
 const props = defineProps<{

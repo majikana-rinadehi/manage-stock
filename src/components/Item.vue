@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { defineProps, defineEmits, toRefs, computed } from 'vue'
-import useDatabase from '../disposable/useDatabase'
-import useSelectDelete from '../disposable/useSelectDelete'
-import type { Item } from '../disposable/types'
+import useDatabase from '../composable/useDatabase'
+import useSelectDelete from '../composable/useSelectDelete'
+import type { Item } from '../composable/types'
 
 const props = defineProps<{ // eslint-disable-line vue/valid-define-props
     item: Item 

@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { defineProps, defineEmits, toRefs, watch } from 'vue'
-import useMemoItems from '../disposable/useMemoItems'
+import useMemoItems from '../composable/useMemoItems'
 import ItemAdd_2 from './ItemAdd_2.vue'
-import { Item, DisplayCategory } from '../disposable/types'
+import { Item, DisplayCategory } from '../composable/types'
 
 
 const props = defineProps<{ // eslint-disable-line vue/valid-define-props

@@ -1,8 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import { useAuth } from '../disposable/useAuth.ts'
+import { useAuth } from '../composable/useAuth.ts'
 import Home from '../components/Home.vue'
 import Login from '../components/Login.vue'
-import useMessage from '../disposable/useMessage'
+import useMessage from '../composable/useMessage'
 
 const { setMessage } = useMessage()
 const { isAuthenticated } = useAuth()

@@ -11,7 +11,7 @@
 
 <script setup lang="ts">
 import { ref, defineProps,  watch, toRefs, nextTick } from 'vue'
-import type { EditForm } from '../disposable/types'
+import type { EditForm } from '../composable/types'
 
 const props = defineProps(['show'])
 const {

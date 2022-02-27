@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useAuth } from '../disposable/useAuth'
+import { useAuth } from '../composable/useAuth'
 import { ref } from 'vue'
 import router from '../router/index.js'
 import UserProfile from './UserProfile'

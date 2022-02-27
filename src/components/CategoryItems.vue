@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { defineProps, defineEmits, toRefs, ref } from 'vue'
 import Item from './Item'
-import useItemFilters from '../disposable/useItemFilters'
-import useDatabase from '../disposable/useDatabase'
-import { DisplayCategory } from '@/disposable/types'
+import useItemFilters from '../composable/useItemFilters'
+import useDatabase from '../composable/useDatabase'
+import { DisplayCategory } from '@/composable/types'
 import ConfirmPopup from './ConfirmPopup'
 
 const props = defineProps<{ // eslint-disable-line vue/valid-define-props

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import useMessage from '../disposable/useMessage'
+import useMessage from '../composable/useMessage'
 
 const { messageRef } = useMessage()
 const isActive = messageRef

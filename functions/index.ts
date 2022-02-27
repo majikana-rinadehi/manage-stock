@@ -1,4 +1,4 @@
-import { LineData, MailData } from '../src/disposable/types'
+import { LineData, MailData } from '../src/composable/types'
 
 const functions = require("firebase-functions");
 const nodemailer = require('nodemailer')

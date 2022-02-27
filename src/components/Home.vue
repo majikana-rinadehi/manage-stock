@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import useDatabase from '../disposable/useDatabase'
+import useDatabase from '../composable/useDatabase'
 import ItemAdd_2 from './ItemAdd_2'
 import CategoryAdd from './CategoryAdd'
 import CategoryItems from './CategoryItems'
@@ -8,7 +8,7 @@ import EditItem from './EditItem'
 import ShoppingList from './ShoppingList'
 import Header from './Header'
 import { ref, onMounted } from 'vue'
-import { Item } from '@/disposable/types'
+import { Item } from '@/composable/types'
 
 const { 
   useListener,

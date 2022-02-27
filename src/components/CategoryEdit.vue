@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { toRefs, ref, defineProps, defineEmits, nextTick, watch } from 'vue'
-import { Category } from '../disposable/types'
+import { Category } from '../composable/types'
 import ConfirmPopup from './ConfirmPopup'
 
 const emit = defineEmits(['update', 'delete'])
