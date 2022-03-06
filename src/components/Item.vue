@@ -70,6 +70,7 @@ const isSelected = computed(() => {
             {{item.value + item.unit_name}}
         </span>
         <button 
+            :disabled="item.value === 0"
             class="font-black"
             @click.stop="decrementValue(item.id)">
             <!--マイナスボタン-->
