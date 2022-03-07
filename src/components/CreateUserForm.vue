@@ -46,7 +46,7 @@ const signingUp = async () => {
 <template>
     <div class="w-4/5 my-4 mx-auto justify-center">
         <div 
-            class="flex flex-col w-3/5 mx-auto my-4 px-4 pt-0 pb-8 bg-gray-lightest"
+            class="flex flex-col w-3/5 mx-auto my-4 px-4 pt-0 pb-8 bg-gray-100"
             style="font: inherit;">
             <div class="flex flex-col h-16 mb-4 p-2 items-center">
                 <div class="self-start text-base h-40">mail</div>

@@ -62,12 +62,12 @@ const showingCreateUserForm = () => {
 </script>
 <template>
     <div 
-        class="flex flex-col w-2/5 min-w-400 mx-auto bg-gray-light rounded-2xl shadow-around"
+        class="flex flex-col w-2/5 min-w-400 mx-auto bg-gray-200 rounded-2xl shadow-around"
         style="font: inherit;">
         <div
             ref="loginContainer"
             id="form-wrapper"
-            class="flex flex-col w-3/5 mx-auto my-4 px-4 pt-0 pb-8 bg-gray-lightest "
+            class="flex flex-col w-3/5 mx-auto my-4 px-4 pt-0 pb-8 bg-gray-100 "
             style="font: inherit;">
             <div class="flex flex-col h-16 mb-4 p-2 items-center">
                 <div class="self-start text-base h-40">mail</div>
@@ -92,8 +92,10 @@ const showingCreateUserForm = () => {
             </div>
         </div>
         <div class="flex w-4/5 h-8 my-4 mx-auto justify-center">
-            <button v-if="isAllValid" class="btn hover:bg-yellow-700" @click="logginIn">Login</button>
-            <button v-if="!isAllValid" class="btn btn-disable" disabled>Login</button>
+            <transition name="fade" mode="out-in">
+                <button v-if="isAllValid" class="btn hover:bg-yellow-700" @click="logginIn">Login</button>
+                <button v-else class="btn btn-disable" disabled>Login</button>
+            </transition>
         </div>
         <div class="mt-4 mx-auto justify-center">
             ===または===
@@ -139,5 +141,14 @@ input:focus{
 .btn-disable{
   color: white;
   background: #8a8787;
+}
+
+.fade-enter-active {
+    transition: opacity 0.5s;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+    opacity: 0;
 }
 </style>

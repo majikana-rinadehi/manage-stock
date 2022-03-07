@@ -44,6 +44,7 @@ const resetItems = () => {
 
 /** 買い物メモのスクショを撮る */
 const capture = async () => {
+    openCapture()
     const loader = $loading.show({
         container: listContainer.value
     })
@@ -107,14 +108,25 @@ function closeCapture() {
                 />
             </div>
             <!-- アイテムキャプチャー画像表示欄 -->
-            <div class="mx-auto" v-show="showCapture">
-                <button @click="closeCapture">画像を削除</button>
-                <div class="mx-auto" id="result"></div>
-            </div>
-            <ShoppingFooter @capture-memo-items="capture" @open-capture="openCapture" />
+            <transition name="fade">
+                <div class="mx-auto" v-show="showCapture">
+                    <button @click="closeCapture">画像を削除</button>
+                    <div class="mx-auto" id="result"></div>
+                </div>
+            </transition>
+            <ShoppingFooter @capture-memo-items="capture" />
         </div>
     </div>
 </template>
 
 <style scoped>
+.fade-enter-active,
+.fade-leave-active {
+    transition: opacity 0.7s;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+    opacity: 0;
+}
 </style>

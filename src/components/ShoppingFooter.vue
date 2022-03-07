@@ -9,7 +9,7 @@ import { useLoading } from 'vue-loading-overlay'
 import useVuelidate from '@vuelidate/core'
 import { required, email } from '@vuelidate/validators'
 
-defineEmits(['capture-memo-items', 'open-capture'])
+defineEmits(['capture-memo-items'])
 const $loading = useLoading()
 
 const {
@@ -104,10 +104,10 @@ function sendingLine() {
                 <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
                 <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
             </svg>
-            <div @click="creatingMail()">
+            <button @click="creatingMail()">
                 <!--メールで共有-->
                 メール/Lineで共有
-            </div>
+            </button>
             <div
                 class="fixed top-0 left-0 right-0 flex justify-center mt-48"
                 v-show="state.showMail"
@@ -116,25 +116,53 @@ function sendingLine() {
                     <!--モーダルウィンドウ-->
                 </div>
                 <!-- メールテキスト -->
-                <div class="bg-white relative rounded-xl p-5" style="max-width: 800px;">
-                    <textarea cols="50" rows="20" v-model="mailText"></textarea>
-                    <div>
-                        <label for="send-to">宛先メールアドレス</label>
-                        <input class="border-2 border-sky-500 " type="mail" v-model="state.sendTo" id="send-to" />
+                <div class="flex flex-col bg-white relative rounded-xl p-5" style="max-width: 800px;">
+                    <div class="self-start text-2xl font-black">
+                        買い物メモ
+                    </div>
+                    <textarea 
+                        class="border-4 border-stone-700 font-mono"
+                        cols="50" rows="15" v-model="mailText"></textarea>
+                    <div class="mt-4">
+                        <div class="flex flex-col items-center">
+                            <label for="send-to">宛先メールアドレス</label>
+                            <input
+                                class="border-2 border-stone-700"
+                                type="mail"
+                                v-model="state.sendTo"
+                                id="send-to"
+                            />
+                        </div>
                         <div v-for="error of v$.sendTo.$errors" :key="error.$uid">
-                            <div v-show="error.$validator === 'email'" class="text-xs text-red-600">
-                            メールアドレスの形式が変!
-                            </div>
-                            <div v-show="error.$validator === 'required'" class="text-xs text-red-600">
-                                メールアドレスがないんですけど
-                            </div>
+                            <div
+                                v-show="error.$validator === 'email'"
+                                class="text-xs text-red-600"
+                            >メールアドレスの形式が変!</div>
+                            <div
+                                v-show="error.$validator === 'required'"
+                                class="text-xs text-red-600"
+                            >メールアドレスがないんですけど</div>
                         </div>
-                        <div class="flex justify-center">
-                            <button v-if="isAllValid" class="btn" @click="sendingMail">メールを送信</button>
-                            <button v-if="!isAllValid" class="btn btn-disable" disabled>メールを送信</button>
+                        <div class="flex justify-center mt-4">
+                            <button
+                                v-if="isAllValid"
+                                class="px-4 py-2 bg-rose-500 hover:bg-rose-800 text-white rounded-lg font-bold text-xs"
+                                @click="sendingMail"
+                            >メールを送信</button>
+                            <button
+                                v-if="!isAllValid"
+                                class="px-4 py-2 bg-gray-300 text-white rounded-lg font-bold text-xs"
+                                disabled
+                            >メールを送信</button>
                         </div>
-                        <div class="flex justify-center">
-                            <button class="btn" @click="sendingLine">Lineを送信</button>
+                        <div class="text-center mt-4">
+                            =====または=====
+                        </div>
+                        <div class="flex justify-center mt-4">
+                            <button
+                                class="px-4 py-2 bg-green-500 hover:bg-green-800 text-white rounded-lg font-bold text-xs"
+                                @click="sendingLine"
+                            >LINEを送信</button>
                         </div>
                     </div>
                 </div>
@@ -153,7 +181,7 @@ function sendingLine() {
                     clip-rule="evenodd"
                 />
             </svg>
-            <button @click="$emit('capture-memo-items'), $emit('open-capture')">
+            <button @click="$emit('capture-memo-items')">
                 <!--画像で保存-->
                 メモのスクショを撮る
             </button>
@@ -161,22 +189,4 @@ function sendingLine() {
     </div>
 </template>
 <style scoped>
-.btn {
-    color: white;
-    background: #292727;
-    display: block;
-    font-weight: bolder;
-    font-size: 1em;
-    height: 100%;
-    padding: 0.2em;
-    border-style: none;
-    cursor: pointer;
-    font-family: inherit;
-    letter-spacing: 0.1rem;
-    appearance: none;
-}
-.btn-disable {
-    color: white;
-    background: #8a8787;
-}
 </style>
