@@ -8,7 +8,8 @@ import EditItem from './EditItem'
 import ShoppingList from './ShoppingList'
 import Header from './Header'
 import { ref, onMounted } from 'vue'
-import { Item } from '@/composable/types'
+import { Item, EditForm } from '@/composable/types'
+import { useLoading } from 'vue-loading-overlay'
 
 const { 
   useListener,
@@ -32,6 +33,9 @@ const editItem = ref<Item>()
 const showList = ref(false)
 const listTitle = ref("")
 
+const $loading = useLoading()
+const fullPage = ref(false)
+
 const openEditItem = (item: Item) => {
   showEditItem.value = true
   editItem.value = item
@@ -50,12 +54,31 @@ const closeList = () => {
   showList.value = false
 }
 
-const updatingCategory = (categoryName: string, categoryId: string) => {
-  updateCategory(categoryName, categoryId)
+const updatingCategory = async (categoryName: string, categoryId: string) => {
+  const loader = $loading.show({})
+  await updateCategory(categoryName, categoryId)
+  loader.hide()
 }
 
-const deletingCategory = (categoryId: string) => {
-  deleteCategory(categoryId)
+const deletingCategory = async (categoryId: string) => {
+  const loader = $loading.show({})
+  await deleteCategory(categoryId)
+  loader.hide()
+}
+
+const updatingItem = async (form: EditForm) => {
+  const loader = $loading.show({})
+  await updateItem(form)
+  loader.hide()
+  closeEditItem()
+}
+
+const deletingItem = async (itemId: string) => {
+  const loader = $loading.show({})
+  await deleteItem(itemId)
+  loader.hide()
+  closeEditItem()
+
 }
 </script>
 
@@ -97,8 +120,8 @@ const deletingCategory = (categoryId: string) => {
         <EditItem 
           v-show="showEditItem" 
           @close-modal="closeEditItem"
-          @delete-item="deleteItem"
-          @update-item="updateItem"
+          @delete-item="deletingItem"
+          @update-item="updatingItem"
           :item="editItem"
           :show="showEditItem"/>
         <ShoppingList

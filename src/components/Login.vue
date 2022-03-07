@@ -1,13 +1,16 @@
 <script setup lang="ts">
 import CreateUserForm from './CreateUserForm.vue'
 import { useAuth } from '../composable/useAuth'
+import useMessage  from '../composable/useMessage'
 import { ref, nextTick } from 'vue'
 import { reactive, computed } from 'vue'
 import router from '../router/index.js'
 import useVuelidate from '@vuelidate/core'
 import { required, email } from '@vuelidate/validators'
+import { useLoading } from 'vue-loading-overlay'
 
 const { login, auth } = useAuth()
+const { errorHandler } = useMessage()
 
 const showCreateUserForm = ref(false)
 const createUserFormRef = ref(null)
@@ -21,6 +24,9 @@ const rules = {
 }
 const v$ = useVuelidate(rules, state)
 
+const $loading= useLoading()
+const loginContainer = ref(null)
+
 const isAllValid = computed(() => {
     return v$.value.$errors.length === 0
 })
@@ -28,13 +34,23 @@ const validating = async () => {
     await v$.value.$validate()
 }
 const logginIn = async () => {
-    validating()
-    if(isAllValid.value === true){
-        await login(auth, state.mail, state.password)
-        router.push("/")
-        state.mail = ""
-        state.password = ""
-    }
+    await validating()
+    if(isAllValid.value === false) return
+    const loader = $loading.show({
+        container: loginContainer.value
+    })
+    await login(auth, state.mail, state.password)
+        .then(() => {
+            router.push("/")
+            state.mail = ""
+            state.password = ""
+            loader.hide()   
+        })
+        .catch((err) => {
+            // 20220307 firebaseエラー発生時、メッセージが表示されない対応
+            errorHandler(err)
+            loader.hide()
+        })
 }
 
 const showingCreateUserForm = () => {
@@ -45,9 +61,12 @@ const showingCreateUserForm = () => {
 }
 </script>
 <template>
-    <div class="flex flex-col w-2/5 min-w-400 mx-auto bg-gray-light rounded-2xl shadow-around"
+    <div 
+        class="flex flex-col w-2/5 min-w-400 mx-auto bg-gray-light rounded-2xl shadow-around"
         style="font: inherit;">
-        <div id="form-wrapper"
+        <div
+            ref="loginContainer"
+            id="form-wrapper"
             class="flex flex-col w-3/5 mx-auto my-4 px-4 pt-0 pb-8 bg-gray-lightest "
             style="font: inherit;">
             <div class="flex flex-col h-16 mb-4 p-2 items-center">

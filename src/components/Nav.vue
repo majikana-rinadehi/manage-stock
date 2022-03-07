@@ -3,15 +3,26 @@ import { useAuth } from '../composable/useAuth'
 import { ref } from 'vue'
 import router from '../router/index.js'
 import UserProfile from './UserProfile'
+import { useLoading } from 'vue-loading-overlay'
+import useMessage from '../composable/useMessage'
 
 const { logout, isAuthenticated, auth, user } = useAuth()
+const { setMessage } = useMessage()
 
 const showProfile = ref(false)
 
+const $loading = useLoading()
+const fullPage = ref(false)
+
 const logginOut = async () => {
     closeUserProfile()
+    const loader = $loading.show({})
     await logout(auth)
-    router.push("/login")
+    setTimeout(() => {
+        loader.hide()
+        router.push("/login")
+        setMessage("ログアウトしました","info",3000)
+    }, 1000)
 }
 
 const openUserProfile = () => {

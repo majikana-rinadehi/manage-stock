@@ -3,8 +3,13 @@ import { Ref } from '@vue/reactivity'
 import { MemoItem } from './types'
 
 const memoItems: Ref<Array<MemoItem>> = ref([])
+/**
+ * 初期表示時に格納する。
+ * immutable
+ */
+// const _memoItems: Ref<Array<MemoItem>> = ref([])
 // memoItemsをuseMemoItems()スコープ内に入れると、
-// displayItemsが、SyoppingFooter側に反映されない
+// displayItemsが、ShoppingFooter側に反映されない
 // その代わり、スコープ外に置くとMemoCategoriesでのincrementがItemにも反映される。。。？
 
 export default function useMemoItems() {

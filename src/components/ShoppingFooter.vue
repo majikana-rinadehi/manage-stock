@@ -1,12 +1,16 @@
 <script setup lang="ts">
-import { defineEmits, ref } from 'vue'
-import { Ref } from '@vue/reactivity'
+import { defineEmits, reactive, computed } from 'vue'
 import useMemoItems from '../composable/useMemoItems'
 import useMessage from '../composable/useMessage'
 import { MailData } from '../composable/types'
 import { firebaseApp } from '../settings/firebase.js'
 import { getFunctions, httpsCallable } from 'firebase/functions'
+import { useLoading } from 'vue-loading-overlay'
+import useVuelidate from '@vuelidate/core'
+import { required, email } from '@vuelidate/validators'
+
 defineEmits(['capture-memo-items', 'open-capture'])
+const $loading = useLoading()
 
 const {
     mailText,
@@ -14,49 +18,70 @@ const {
 const {
     setMessage
 } = useMessage()
-
-const showMail: Ref<boolean> = ref(false)
-const sendTo: Ref<string> = ref("")
-const mailSubject: Ref<string> = ref("")
+const state = reactive({
+    showMail: false,
+    sendTo: "",
+    mailSubject: ""
+})
+const rules = {
+    sendTo: { required, email }
+}
+const v$ = useVuelidate(rules, state)
+const validating = async () => {
+    await v$.value.$validate()
+}
+const isAllValid = computed(() => {
+    return v$.value.$errors.length === 0
+})
 
 const functions = getFunctions(firebaseApp)
 const sendMail = httpsCallable(functions, 'sendMail')
 const sendLine = httpsCallable(functions, 'sendLine')
 
-const sendingMail: () => void = () =>{
+const sendingMail = async () => {
+    await validating()
+    if (isAllValid.value === false) return
     const data: MailData = {
         from: "rudyrudy2103@gmail.com",
-        to: sendTo.value, 
-        subject: mailSubject.value, 
+        to: state.sendTo,
+        subject: state.mailSubject,
         text: mailText.value
     }
-
+    const loader = $loading.show({})
     sendMail(data)
         .then(() => {
-            showMail.value = false
-            setMessage("メールを送信しました","info",3000)
+            state.showMail = false
+            loader.hide()
+            setMessage("メールを送信しました", "info", 3000)
         })
         .catch(err => {
-            showMail.value = false
-            setMessage("メールの送信に失敗しました","error",3000)
+            state.showMail = false
+            loader.hide()
+            setMessage("メールの送信に失敗しました", "error", 3000)
             console.log(err);
         })
 }
-function creatingMail(): void{
-    showMail.value = true
+function creatingMail(): void {
+    state.showMail = true
 }
 
-function sendingLine () {
+/**
+ * `mailText.value` の内容をLineで送る
+ */
+function sendingLine() {
     const data: { text: string } = {
         text: mailText.value
     }
+    const loader = $loading.show({})
     sendLine(data)
         .then(() => {
-            showMail.value = false
+            state.showMail = false
+            loader.hide()
             setMessage("Lineを送信しました", "info", 3000)
         })
         .catch(err => {
-            showMail.value = false
+            state.showMail = false
+            loader.hide()
             setMessage("Lineの送信に失敗しました", "error", 3000)
             console.log(err)
         })
@@ -64,12 +89,18 @@ function sendingLine () {
 </script>
 
 <template>
-    <div class="flex justify-start justify-between">
+    <div class="flex justify-start justify-between items-end">
         <!--全部買ったボタン-->
-        <button class="px-4 py-2 bg-green-500 hover:bg-green-700 
-            text-white rounded-lg font-bold text-xs">全部買った</button>
+        <button
+            class="px-4 py-2 bg-green-500 hover:bg-green-700 text-white rounded-lg font-bold text-xs"
+        >全部買った</button>
         <div class="flex">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+            <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-5 w-5"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+            >
                 <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
                 <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
             </svg>
@@ -77,40 +108,75 @@ function sendingLine () {
                 <!--メールで共有-->
                 メール/Lineで共有
             </div>
-            <div class="fixed  top-0 left-0 right-0 flex justify-center mt-48"
-                v-show="showMail">
-                <div 
-                    class="fixed inset-0 bg-gray-400 opacity-50"
-                    @click="showMail=false">
+            <div
+                class="fixed top-0 left-0 right-0 flex justify-center mt-48"
+                v-show="state.showMail"
+            >
+                <div class="fixed inset-0 bg-gray-400 opacity-50" @click="state.showMail = false">
                     <!--モーダルウィンドウ-->
                 </div>
                 <!-- メールテキスト -->
-                <div class=" bg-white relative rounded-xl p-5"
-                    style="max-width: 800px;">
-                    <textarea name="" id="" cols="50" rows="20"
-                        v-model="mailText">
-                    </textarea>
+                <div class="bg-white relative rounded-xl p-5" style="max-width: 800px;">
+                    <textarea cols="50" rows="20" v-model="mailText"></textarea>
                     <div>
                         <label for="send-to">宛先メールアドレス</label>
-                        <input type="mail" v-model="sendTo" id="send-to">
-                        <div>
-                            <button @click="sendingMail">メールを送信</button>
+                        <input class="border-2 border-sky-500 " type="mail" v-model="state.sendTo" id="send-to" />
+                        <div v-for="error of v$.sendTo.$errors" :key="error.$uid">
+                            <div v-show="error.$validator === 'email'" class="text-xs text-red-600">
+                            メールアドレスの形式が変!
+                            </div>
+                            <div v-show="error.$validator === 'required'" class="text-xs text-red-600">
+                                メールアドレスがないんですけど
+                            </div>
                         </div>
-                        <div>
-                            <button @click="sendingLine">Lineを送信</button>
+                        <div class="flex justify-center">
+                            <button v-if="isAllValid" class="btn" @click="sendingMail">メールを送信</button>
+                            <button v-if="!isAllValid" class="btn btn-disable" disabled>メールを送信</button>
+                        </div>
+                        <div class="flex justify-center">
+                            <button class="btn" @click="sendingLine">Lineを送信</button>
                         </div>
                     </div>
-                </div> 
-            </div>               
+                </div>
+            </div>
         </div>
         <div class="flex">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                <path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd" />
+            <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-5 w-5"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+            >
+                <path
+                    fill-rule="evenodd"
+                    d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z"
+                    clip-rule="evenodd"
+                />
             </svg>
-            <div @click="$emit('capture-memo-items'), $emit('open-capture')">
+            <button @click="$emit('capture-memo-items'), $emit('open-capture')">
                 <!--画像で保存-->
-                画像で保存
-            </div>
+                メモのスクショを撮る
+            </button>
         </div>
     </div>
 </template>
+<style scoped>
+.btn {
+    color: white;
+    background: #292727;
+    display: block;
+    font-weight: bolder;
+    font-size: 1em;
+    height: 100%;
+    padding: 0.2em;
+    border-style: none;
+    cursor: pointer;
+    font-family: inherit;
+    letter-spacing: 0.1rem;
+    appearance: none;
+}
+.btn-disable {
+    color: white;
+    background: #8a8787;
+}
+</style>

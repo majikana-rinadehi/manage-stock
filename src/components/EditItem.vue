@@ -13,11 +13,6 @@ const {
     item,
     show
 } = toRefs(props)
-// const emit = defineEmits<{
-//     (event: 'closeModal'): void,
-//     (event: 'deleteItem', id: string): void,
-//     (event: 'updateItem', item: EditForm): void,
-// }>()
 
 const form = ref<EditForm>({
     id: '',
@@ -66,13 +61,6 @@ const clear = () => {
     })
 }
 
-// const closingModal = () => emit('closeModal')
-// const updatingItem = () => {
-//     if (!isAllValid.value) return
-//     emit('updateItem', form.value)
-//     emit('closeModal')
-// }
-// const deletingItem = () => emit('deleteItem', form.value.id); emit('closeModal')
 </script>
 
 <template>
@@ -97,7 +85,7 @@ const clear = () => {
                     <button 
                             class="px-4 py-2 bg-red-500 hover:bg-red-700 
                         text-white rounded-lg font-bold text-xs"
-                            @click="$emit('deleteItem', form.id), $emit('closeModal')">
+                            @click="$emit('deleteItem', form.id)">
                         アイテムを削除
                     </button><!--削除-->
                 </div>
@@ -170,7 +158,7 @@ const clear = () => {
                 <!-- 更新ボタン -->
                 <button class="px-4 py-2 bg-green-500 hover:bg-green-700 
                     text-white rounded-lg font-bold text-xs"
-                    @click="$emit('updateItem', form), $emit('closeModal')">
+                    @click="$emit('updateItem', form)">
                     更新
                 </button>
             </div>

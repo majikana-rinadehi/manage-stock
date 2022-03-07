@@ -1,22 +1,21 @@
 import { ref } from 'vue'
+import { FIREBASE_ERROR_MAP } from './constants'
+import { MessageType } from './types'
 
-const messageRef = ref<{ message: string, kind:string }>({ message: "", kind: "" })
+const messageRef = ref<{ message: string, kind: MessageType }>({ message: "", kind: "" })
 const timeoutId = ref()
 // ↑これをuseMessageスコープの中に入れると
 // messageRef.value = message が反映されない
 
-// firebase認証エラーコードに対応するエラーメッセージ
-const firebaseErrorMap: { [index: string]: string } = {
-    "auth/invalid-email": "メールアドレスの形式が不正です",
-    "auth/user-disabled": "無効なユーザーです",
-    "auth/user-not-found": "ユーザーが見つかりません",
-    "auth/wrong-password": "パスワードが間違っています",
-    "auth/email-already-in-use": "すでに使われているメールアドレスです"
-}
-
 export default function useMessage() {
     
-    const setMessage = (message: string, kind: string, displaySec?: number) => {
+    /**
+     * エラーメッセージ( `message` )を `displaySec` ミリ秒表示
+     * @param message 
+     * @param kind
+     * @param displaySec 
+     */
+    const setMessage = (message: string, kind: MessageType, displaySec?: number) => {
         const newMessage = {
             message,
             kind
@@ -33,13 +32,15 @@ export default function useMessage() {
         }
     }
 
-    // firebaseの認証エラーコード、またはその他キャッチされなかった
-    // エラーに対応するエラーメッセージをセット
-    function errorHandler (err: any){
+    /**
+     * firebaseエラーに対応するエラーメッセージ、またはキャッチされなかったエラーメッセージをセット
+     * @param err 
+     */
+    const errorHandler = (err: any) => {
         const errorCode = err.code;
 
-        const errorMessage: string = firebaseErrorMap[errorCode] 
-                            ? firebaseErrorMap[errorCode] 
+        const errorMessage: string = FIREBASE_ERROR_MAP[errorCode] 
+                            ? FIREBASE_ERROR_MAP[errorCode] 
                             : "エラーが発生しました"
         setMessage(errorMessage, "error")
         console.log(err);

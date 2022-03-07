@@ -22,7 +22,6 @@ const useAuth = () => {
         await signOut(auth)
         user.value = null
         isAuthenticated.value = false
-        setMessage("ログアウトしました","info",3000)
     }
 
     const addUser = async(email: string, password: string) => {

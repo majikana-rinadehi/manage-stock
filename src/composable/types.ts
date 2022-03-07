@@ -79,3 +79,8 @@ export interface Category{
 export interface DisplayCategory extends Category {
     items: Item[];
 }
+
+/**
+ * type of message to set to `setMessage()`
+ */
+export type MessageType = "error" | "info" | ""
