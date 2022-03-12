@@ -29,7 +29,6 @@ watch(show, () => {
         category.items.forEach(item => {
             _memoItems.push(item)
         })
-        _memoItems.push(category.items)
     })
     memoItems.value = _memoItems
         .map((obj) => Object.assign({}, obj))
@@ -42,7 +41,6 @@ watch(reset, () => {
         category.items.forEach(item => {
             if (item) _memoItems.push(item)
         })
-        _memoItems.push(category.items)
     })
     memoItems.value = _memoItems
         .map((obj) => Object.assign({}, obj))
@@ -94,18 +92,18 @@ const changingFilter = (filterType: MemoFilterType) => {
 
             <div>
                 <button 
-                    :class="filter?.filterType === 'value' ? ['px-1', 'rounded-2xl', 'bg-gray-300'] : []"
+                    :class="filter.filterType === 'value' ? ['px-1', 'rounded-2xl', 'bg-gray-300'] : []"
                     @click="changingFilter('value')">数量残り1</button>
             </div>
             <div>
                 <button 
-                    :class="filter?.filterType === 'period' ? ['px-1', 'rounded-2xl', 'bg-gray-300'] : []"
+                    :class="filter.filterType === 'period' ? ['px-1', 'rounded-2xl', 'bg-gray-300'] : []"
                     @click="changingFilter('period')">期限残り1日</button>
             </div>
             <div>
                 <button 
-                    :class="filter === null ? ['px-1', 'rounded-2xl', 'bg-gray-300'] : []"
-                    @click="changingFilter('all')">フィルターなし</button>
+                    :class="filter.filterType === 'all' ? ['px-1', 'rounded-2xl', 'bg-gray-300'] : []"
+                    @click="changingFilter('all')">すべて</button>
             </div>
         </div>
     </div>

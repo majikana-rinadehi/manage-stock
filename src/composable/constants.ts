@@ -12,13 +12,13 @@ export const FIREBASE_ERROR_MAP: { [index: string]: string } = {
 }
 
 /** `MemoCategories.vue` で使うフィルター一覧*/
-export const MEMO_FILTER_MAP: {[index in MemoFilterType]: null | {filterType: MemoFilterType, filter: ((item: MemoItem) => boolean)}} = {
+export const MEMO_FILTER_MAP: {[index in MemoFilterType]: {filterType: MemoFilterType, filter: ((item: MemoItem) => boolean)}} = {
     // 数量残り1
     'value': {filterType: 'value', filter: (item: MemoItem) => item.value === 1},
     // 期限残り1日
     'period':{filterType: 'period', filter: (item: MemoItem) => item.period === 1},
     // フィルターなし
-    'all': null
+    'all': {filterType: 'all', filter: (item: MemoItem) => true}
 }
 
 /** `CategoryItems.vue` で使うソーター一覧*/
