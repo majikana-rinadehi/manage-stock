@@ -20,6 +20,8 @@ const {
 } = useMessage()
 const state = reactive({
     showMail: false,
+    /** 「LINEで送るとは？」ポップアップ */
+    showLinePopup: false,
     sendTo: "",
     mailSubject: ""
 })
@@ -89,7 +91,7 @@ function sendingLine() {
 </script>
 
 <template>
-    <div class="flex justify-start justify-between items-end">
+    <div class="mb-8 flex justify-start justify-between items-end">
         <!--全部買ったボタン-->
         <button
             class="px-4 py-2 bg-green-500 hover:bg-green-700 text-white rounded-lg font-bold text-xs"
@@ -108,6 +110,7 @@ function sendingLine() {
                 <!--メールで共有-->
                 メール/Lineで共有
             </button>
+            <!-- メール/LINEで共有モーダル -->
             <div
                 class="fixed top-0 left-0 right-0 flex justify-center mt-48"
                 v-show="state.showMail"
@@ -116,14 +119,18 @@ function sendingLine() {
                     <!--モーダルウィンドウ-->
                 </div>
                 <!-- メールテキスト -->
-                <div class="flex flex-col bg-white relative rounded-xl p-5" style="max-width: 800px;">
-                    <div class="self-start text-2xl font-black">
-                        買い物メモ
-                    </div>
-                    <textarea 
+                <div
+                    class="flex flex-col bg-white relative rounded-xl p-5 pb-8"
+                    style="max-width: 800px;"
+                >
+                    <div class="self-start text-2xl font-black">買い物メモ</div>
+                    <textarea
                         class="border-4 border-stone-700 font-mono"
-                        cols="50" rows="15" v-model="mailText"></textarea>
-                    <div class="mt-4">
+                        cols="50"
+                        rows="15"
+                        v-model="mailText"
+                    ></textarea>
+                    <div class="my-4">
                         <div class="flex flex-col items-center">
                             <label for="send-to">宛先メールアドレス</label>
                             <input
@@ -155,15 +162,25 @@ function sendingLine() {
                                 disabled
                             >メールを送信</button>
                         </div>
-                        <div class="text-center mt-4">
-                            =====または=====
-                        </div>
+                        <div class="text-center mt-4">=====または=====</div>
                         <div class="flex justify-center mt-4">
                             <button
                                 class="px-4 py-2 bg-green-500 hover:bg-green-800 text-white rounded-lg font-bold text-xs"
                                 @click="sendingLine"
                             >LINEを送信</button>
                         </div>
+                        <div>
+                            <a
+                                class="text-xs hover:text-blue-500 hover:underline"
+                                href="#"
+                                @click="state.showLinePopup = true"
+                            >「LINEを送信」とは？</a>
+                        </div>
+                        <div
+                            class="mt-4 -mb-20 mx-auto flex justify-center items-center border rounded-full border-gray-500 text-base w-12 h-12 bg-white shadow-around cursor-pointer"
+                            style="left:calc(50% - 3rem/2);"
+                            @click="state.showMail = false"
+                        >X</div>
                     </div>
                 </div>
             </div>
@@ -187,6 +204,41 @@ function sendingLine() {
             </button>
         </div>
     </div>
+    <!-- 「LINEで送るとは？」ポップアップ」 -->
+    <div class="fixed top-0 left-0 right-0 flex justify-center mt-48" v-show="state.showLinePopup">
+        <div class="fixed inset-0 bg-gray-400 opacity-50" @click="state.showLinePopup = false">
+            <!--モーダルウィンドウ-->
+        </div>
+        <div class="flex flex-col bg-white relative rounded-xl py-12 px-28 max-w-md">
+            公式ラインに買い物メッセージが送られます。
+            <img
+                class="max-w-xs"
+                src="../assets/line_capture.jpg"
+                alt="LINEキャプチャー画面"
+            />
+            <div
+                class="mt-4 -mb-20 mx-auto flex justify-center items-center border rounded-full border-gray-500 text-base w-12 h-12 bg-white shadow-around cursor-pointer"
+                @click="state.showLinePopup = false"
+            >X</div>
+        </div>
+    </div>
 </template>
 <style scoped>
+.close-btn-temp {
+    margin-top: 1rem;
+    margin-bottom: -5rem;
+    margin-right: auto;
+    margin-left: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10rem;
+    border: 1px solid gray;
+    font-size: 1rem;
+    width: 3rem;
+    height: 3rem;
+    background: white;
+    box-shadow: 0 0 1em rgb(109 101 101);
+    cursor: pointer;
+}
 </style>

@@ -45,7 +45,7 @@ const isSelected = computed(() => {
     </div>
     <!--アイテム-->
     <div class="bg-red-500 -mt-2 h-7 w-2 mr-3"
-        v-if="item.period == 1">
+        v-if="item.period <= 1">
     </div>
     <div class="bg-yellow-500 -mt-2 h-7 w-2 mr-3"
         v-else-if="item.period == 2">

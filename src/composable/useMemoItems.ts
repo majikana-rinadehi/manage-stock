@@ -1,28 +1,29 @@
 import { ref, computed, watch } from 'vue'
 import { Ref } from '@vue/reactivity'
-import { MemoItem } from './types'
+import { MemoItem, MemoFilterType } from './types'
+import { MEMO_FILTER_MAP } from './constants'
 
 const memoItems: Ref<Array<MemoItem>> = ref([])
-/**
- * 初期表示時に格納する。
- * immutable
- */
-// const _memoItems: Ref<Array<MemoItem>> = ref([])
-// memoItemsをuseMemoItems()スコープ内に入れると、
-// displayItemsが、ShoppingFooter側に反映されない
-// その代わり、スコープ外に置くとMemoCategoriesでのincrementがItemにも反映される。。。？
 
 export default function useMemoItems() {
 
-    const filter = ref((item: MemoItem) => item.period === 1 )
+    const filter = ref(MEMO_FILTER_MAP['value'])
 
     const displayItems = computed(() => {
         if(!filter.value) return memoItems.value
         return memoItems.value 
-            .filter(filter.value)
+            .filter(filter.value.filter)
     })
 
     const mailText = ref("")
+
+    /**
+     * filterを変更する
+     * @param filterType このフィルター名に変更する
+     */
+    const changeFilter = (filterType: MemoFilterType) => {
+        filter.value = MEMO_FILTER_MAP[filterType]
+    }
 
     watch(displayItems, (newValue)=>{
         console.log("displayItems changed")
@@ -41,5 +42,5 @@ export default function useMemoItems() {
         }
     })
   
-    return { memoItems, filter, displayItems, mailText }
+    return { memoItems, filter, displayItems, mailText, changeFilter }
 }

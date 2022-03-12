@@ -2,8 +2,7 @@
 import { defineProps, defineEmits, toRefs, watch } from 'vue'
 import useMemoItems from '../composable/useMemoItems'
 import ItemAdd_2 from './ItemAdd_2.vue'
-import { Item, DisplayCategory } from '../composable/types'
-
+import { Item, DisplayCategory, MemoFilterType } from '../composable/types'
 
 const props = defineProps<{ // eslint-disable-line vue/valid-define-props
     displayCategories: DisplayCategory[],
@@ -16,38 +15,10 @@ const {
 } = toRefs(props)
 
 const {
-    memoItems, filter, displayItems
+    memoItems, filter, displayItems, changeFilter
 } = useMemoItems()
 defineEmits(['openModal', 'increment', 'decrement'])
 
-function addMemoItem(item_name: string) {
-    memoItems.value.push({
-        "id": "",
-        "category_id": "",
-        "category_name": "",
-        "name": item_name,
-        "value": 1,
-        "period": 1,
-        "unit_name": ""
-    })
-}
-
-function deleteMemoItem(deleteItem: Item) {
-    memoItems.value.forEach((item, i) => {
-        if (item.id === deleteItem.id) {
-            memoItems.value.splice(i, 1)
-            return
-        }
-    })
-}
-function increment(incrementItem: Item) {
-    let item = memoItems.value.find(item => item.id === incrementItem.id)
-    item.value += 1
-}
-function decrement(decrementItem: Item) {
-    let item = memoItems.value.find(item => item.id === decrementItem.id)
-    item.value -= 1
-}
 watch(show, () => {
     // オブジェクトの配列についてはObject.assign()で
     // ディープコピーできなかったので以下の方法で行う。
@@ -77,19 +48,64 @@ watch(reset, () => {
         .map((obj) => Object.assign({}, obj))
     // memoItems.value = Object.assign([], _memoItems)
 })
+
+function addMemoItem(item_name: string) {
+    memoItems.value.push({
+        "id": "",
+        "category_id": "",
+        "category_name": "",
+        "name": item_name,
+        "value": 1,
+        "period": 1,
+        "unit_name": ""
+    })
+}
+
+function deleteMemoItem(deleteItem: Item) {
+    memoItems.value.forEach((item, i) => {
+        if (item.id === deleteItem.id) {
+            memoItems.value.splice(i, 1)
+            return
+        }
+    })
+}
+function increment(incrementItem: Item) {
+    let item = memoItems.value.find(item => item.id === incrementItem.id)
+    item.value += 1
+}
+function decrement(decrementItem: Item) {
+    let item = memoItems.value.find(item => item.id === decrementItem.id)
+    item.value -= 1
+}
+
+const changingFilter = (filterType: MemoFilterType) => {
+    changeFilter(filterType)
+}
+
 </script>
 <template>
     <div class="flex flex-col bg-gray-100">
         <div>絞り込み</div>
         <div class="flex justify-evenly">
+            
+    <!-- border-radius: 1rem;
+    background-color: rgb(200,200,200);
+    padding: 0 0.25rem; -->
+
             <div>
-                <button @click="filter = (item) => item.value === 1">数量残り1</button>
+                <button 
+                    :class="filter?.filterType === 'value' ? ['px-1', 'rounded-2xl', 'bg-gray-300'] : []"
+                    @click="changingFilter('value')">数量残り1</button>
             </div>
             <div>
-                <button @click="filter = (item) => item.period === 1">期限残り1日</button>
+                <button 
+                    :class="filter?.filterType === 'period' ? ['px-1', 'rounded-2xl', 'bg-gray-300'] : []"
+                    @click="changingFilter('period')">期限残り1日</button>
             </div>
             <div>
-                <button @click="filter = null">フィルターなし</button>
+                <button 
+                    :class="filter === null ? ['px-1', 'rounded-2xl', 'bg-gray-300'] : []"
+                    @click="changingFilter('all')">フィルターなし</button>
             </div>
         </div>
     </div>

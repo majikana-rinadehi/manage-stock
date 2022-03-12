@@ -1,7 +1,7 @@
 import html2canvas from 'html2canvas'
 
 export default function useCapture(){
-
+    
     /**
      * ```ShoppingList.vue``` で表示される
      * 買い物メモのhtml要素を```canvas```要素にし、
@@ -24,6 +24,9 @@ export default function useCapture(){
             })
     }
 
+    /**
+     * id="result" の子要素の `canvas` を削除する
+     */
     const deleteCapture = () => {
         const resultElement = document.getElementById("result")
 
@@ -31,5 +34,19 @@ export default function useCapture(){
             resultElement.removeChild(document.getElementById('canvas'))
         } 
     }
-    return { captureMemoItems, deleteCapture }
+
+    /**
+     * `canvas` 要素を画像としてダウンロードする
+     * 参考: https://qiita.com/lookman/items/d93dd62a41f17a4d2de8
+     * @param {HTMLElement | null} canvas `canvas` 要素
+     * @param {string} fileName ファイル名  
+     */
+    const downloadCanvas = (canvas, fileName) => {
+        const link = document.createElement("a")
+        if (!canvas) return 
+        link.href = canvas.toDataURL("image/png")
+        link.download = fileName
+        link.click()
+    }
+    return { captureMemoItems, deleteCapture, downloadCanvas }
 }

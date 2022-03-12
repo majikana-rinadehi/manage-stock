@@ -84,3 +84,20 @@ export interface DisplayCategory extends Category {
  * type of message to set to `setMessage()`
  */
 export type MessageType = "error" | "info" | ""
+
+/**
+ * type of filters to use in MemoCategories.vue  
+ * `'value'` 数量残り1  
+ * `'period'` 期限残り1日  
+ * `'all'` フィルターなし  
+ */
+export type MemoFilterType = 'value' | 'period' | 'all'
+
+/**
+ * type of **sorters** to use in CategoryItems.vue  
+ * `'value'` 数量  
+ * `'period'` 期限    
+ * `'all'` フィルターなし  
+ * `'addDate'` 作成日  
+ */
+ export type CategoryItemsSorterType = MemoFilterType | 'addDate'

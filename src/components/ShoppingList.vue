@@ -10,7 +10,8 @@ const $loading = useLoading()
 
 const {
     captureMemoItems,
-    deleteCapture
+    deleteCapture,
+    downloadCanvas
 } = useCapture()
 
 interface Props {
@@ -44,10 +45,10 @@ const resetItems = () => {
 
 /** 買い物メモのスクショを撮る */
 const capture = async () => {
-    openCapture()
     const loader = $loading.show({
         container: listContainer.value
     })
+    openCapture()
     await captureMemoItems()
     loader.hide()
 }
@@ -58,8 +59,13 @@ function openCapture() {
 }
 /** 買い物メモのスクショを削除する */
 function closeCapture() {
-    deleteCapture()
     showCapture.value = false
+    deleteCapture()
+}
+/** 買い物メモのスクショをダウンロードする */
+const downloadingCapture = () => {
+    const canvas = document.getElementById('canvas')
+    downloadCanvas(canvas, 'capture.png')
 }
 </script>
 
@@ -81,10 +87,6 @@ function closeCapture() {
             <div class="text-2xl font-black">{{ listTitle }}</div>
             <!-- ヘッダー -->
             <div class="flex justify-end">
-                <!--戻るボタン-->
-                <div class="justify-self-start mr-auto">
-                    <button class="text-xl" @click="$emit('closeList')">←</button>
-                </div>
                 <!-- リセットボタン -->
                 <div>
                     <button
@@ -109,11 +111,31 @@ function closeCapture() {
             </div>
             <!-- アイテムキャプチャー画像表示欄 -->
             <transition name="fade">
-                <div class="mx-auto" v-show="showCapture">
-                    <button @click="closeCapture">画像を削除</button>
-                    <div class="mx-auto" id="result"></div>
+                <div
+                    class="fixed top-0 left-0 right-0 flex justify-center mt-48"
+                    v-show="showCapture"
+                >
+                    <div class="fixed inset-0 bg-gray-400 opacity-50" @click="closeCapture"></div>
+                    <div
+                        class="flex flex-col content-center bg-white relative rounded-xl py-12 px-28 max-w-md"
+                    >
+                        <div>
+                            <button
+                                class="mb-4 px-4 py-2 bg-rose-500 hover:bg-rose-700 text-white rounded-lg font-bold text-xs"
+                                @click="downloadingCapture"
+                            >画像をダウンロード</button>
+                        </div>
+                        <div class="flex justify-center" id="result"></div>
+                        <div class="close-btn-temp" @click="closeCapture">X</div>
+                    </div>
                 </div>
             </transition>
+            <div 
+                class="fixed translate-y-12 close-btn-temp" 
+                style="left:calc(50% - 3rem/2);"
+                @click="$emit('closeList')">
+                X
+            </div>
             <ShoppingFooter @capture-memo-items="capture" />
         </div>
     </div>
@@ -128,5 +150,23 @@ function closeCapture() {
 .fade-enter-from,
 .fade-leave-to {
     opacity: 0;
+}
+
+.close-btn-temp {
+    margin-top: 1rem;
+    font-size: 1rem;
+    margin-bottom: -5rem;
+    border-radius: 10rem;
+    border: 1px solid gray;
+    width: 3rem;
+    margin-right: auto;
+    margin-left: auto;
+    height: 3rem;
+    background: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 0 1em rgb(109 101 101);
+    cursor: pointer;
 }
 </style>

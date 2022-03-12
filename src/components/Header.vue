@@ -40,7 +40,7 @@ const {
                 </div>
             </div>
             <div 
-                class="flex items-end text-3xl mr-10"
+                class="flex items-end text-3xl mr-10 cursor-pointer"
                 @click="$emit('openList','買い物メモ')">
                 <!--かいものメモ発行ボタン-->
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" viewBox="0 0 20 20" fill="currentColor" onclick="console.log('clicked')">
